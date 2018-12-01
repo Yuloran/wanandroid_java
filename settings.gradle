@@ -1,0 +1,1 @@
+include ':app', ':lib_core', ':lib_repository', ':module_base'

@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+
+    // rxjava
+    api "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxandroid_version"
+    api "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxjava_version"
+    // rxlifecycle
+    api "com.trello.rxlifecycle3:rxlifecycle-components:$rootProject.ext.rxlifecycle_version"
+    // gson
+    api "com.google.code.gson:gson:$rootProject.ext.gson_version"
+    // retrofit2
+    api "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit_version"
+    // retrofit2-rxjava2-adapter
+    api "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofit_version"
+    // retrofit2-gson-converter
+    api("com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version") {
+        exclude group: 'com.google.code.gson'
+    }
+    // logging_interceptor
+    api "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.logging_interceptor_version"
+}

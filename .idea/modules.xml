@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib_core/lib_core.iml" filepath="$PROJECT_DIR$/lib_core/lib_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib_repository/lib_repository.iml" filepath="$PROJECT_DIR$/lib_repository/lib_repository.iml" />
+      <module fileurl="file://$PROJECT_DIR$/module_base/module_base.iml" filepath="$PROJECT_DIR$/module_base/module_base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wanandroid_java.iml" filepath="$PROJECT_DIR$/wanandroid_java.iml" />
+    </modules>
+  </component>
+</project>
