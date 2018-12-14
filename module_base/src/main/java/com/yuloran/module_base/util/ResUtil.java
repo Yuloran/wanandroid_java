@@ -55,8 +55,8 @@ public final class ResUtil
 
     static
     {
-        MAIN_PAGES.add(new MainPage(OFFICIAL_ACCOUNT, R.string.tab_official_account));
         MAIN_PAGES.add(new MainPage(RECOMMEND, R.string.tab_recommend));
+        MAIN_PAGES.add(new MainPage(OFFICIAL_ACCOUNT, R.string.tab_official_account));
         MAIN_PAGES.add(new MainPage(KNOWLEDGE_STRUCTURE, R.string.tab_knowledge_structure));
         MAIN_PAGES.add(new MainPage(PROJECT, R.string.tab_project));
         MAIN_PAGES.add(new MainPage(NAVIGATION, R.string.tab_navigation));
