@@ -26,7 +26,8 @@ import com.google.gson.annotations.SerializedName;
  *
  * @since 1.0.0
  */
-public class BaseResp {
+public class BaseResp
+{
 
     /** 错误码 */
     @Expose
@@ -38,19 +39,23 @@ public class BaseResp {
     @SerializedName("errorMsg")
     private String errorMsg;
 
-    public int getErrorCode() {
+    public int getErrorCode()
+    {
         return errorCode;
     }
 
-    public void setErrorCode(int errorCode) {
+    public void setErrorCode(int errorCode)
+    {
         this.errorCode = errorCode;
     }
 
-    public String getErrorMsg() {
+    public String getErrorMsg()
+    {
         return errorMsg;
     }
 
-    public void setErrorMsg(String errorMsg) {
+    public void setErrorMsg(String errorMsg)
+    {
         this.errorMsg = errorMsg;
     }
 

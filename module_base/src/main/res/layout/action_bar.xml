@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.yuloran.module_base.widget.ActionBar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_action_bar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/actionbar_height"
+    android:background="@color/toolbar_background"
+    android:paddingStart="@dimen/page_padding_start"
+    android:paddingEnd="@dimen/page_padding_end">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/my_action_bar_back"
+        android:layout_width="@dimen/button_hot_width"
+        android:layout_height="@dimen/button_hot_height"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/button_inner_padding"
+        android:src="@drawable/ic_menu_white" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/my_action_bar_title"
+        style="@style/TextAppearance.AppCompat.Medium.TitleWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/text_margin_start"
+        android:layout_marginEnd="@dimen/text_margin_end"
+        android:layout_toStartOf="@+id/my_action_bar_option1"
+        android:layout_toEndOf="@+id/my_action_bar_back"
+        android:ellipsize="end"
+        android:text="@string/app_name" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/my_action_bar_option1"
+        android:layout_width="@dimen/button_hot_width"
+        android:layout_height="@dimen/button_hot_height"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/my_action_bar_option2"
+        android:padding="@dimen/button_inner_padding"
+        android:visibility="gone"
+        tools:src="@drawable/ic_ok_white"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/my_action_bar_option2"
+        android:layout_width="@dimen/button_hot_width"
+        android:layout_height="@dimen/button_hot_height"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/button_inner_padding"
+        android:visibility="gone"
+        tools:src="@drawable/ic_search_white"
+        tools:visibility="visible" />
+</com.yuloran.module_base.widget.ActionBar>

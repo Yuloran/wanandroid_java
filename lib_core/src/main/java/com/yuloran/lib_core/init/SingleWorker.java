@@ -32,13 +32,15 @@ import androidx.annotation.NonNull;
  *
  * @since 1.0.0
  */
-public final class SingleWorker {
+public final class SingleWorker
+{
 
     private static final String TAG = "SingleWorker";
 
     private static final ExecutorService mSingleExecutorService = Executors.newSingleThreadExecutor();
 
-    private SingleWorker() {
+    private SingleWorker()
+    {
     }
 
     /**
@@ -51,7 +53,8 @@ public final class SingleWorker {
      *                                    accepted for execution
      * @throws NullPointerException       if command is null
      */
-    public static void execute(@NonNull Runnable task) {
+    public static void execute(@NonNull Runnable task)
+    {
         Objects.requireNonNull(task);
         mSingleExecutorService.execute(task);
     }
@@ -67,7 +70,8 @@ public final class SingleWorker {
      *                                    scheduled for execution
      * @throws NullPointerException       if the task is null
      */
-    public static Future<?> submit(@NonNull Runnable task) {
+    public static Future<?> submit(@NonNull Runnable task)
+    {
         Objects.requireNonNull(task);
         return mSingleExecutorService.submit(task);
     }
@@ -95,7 +99,8 @@ public final class SingleWorker {
      *                                    scheduled for execution
      * @throws NullPointerException       if the task is null
      */
-    public static <T> Future<T> submit(@NonNull Callable<T> task) {
+    public static <T> Future<T> submit(@NonNull Callable<T> task)
+    {
         Objects.requireNonNull(task);
         return mSingleExecutorService.submit(task);
     }
@@ -113,7 +118,8 @@ public final class SingleWorker {
      *                                    scheduled for execution
      * @throws NullPointerException       if the task is null
      */
-    public static <T> Future<T> submit(@NonNull Runnable task, T result) {
+    public static <T> Future<T> submit(@NonNull Runnable task, T result)
+    {
         Objects.requireNonNull(task);
         return mSingleExecutorService.submit(task, result);
     }

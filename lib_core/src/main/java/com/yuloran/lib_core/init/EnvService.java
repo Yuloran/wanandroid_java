@@ -15,6 +15,7 @@
  */
 package com.yuloran.lib_core.init;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.yuloran.lib_core.utils.Logger;
@@ -34,38 +35,46 @@ import io.reactivex.annotations.NonNull;
  *
  * @since 1.0.0
  */
-public final class EnvService implements IInit {
+public final class EnvService implements IInit
+{
 
     private static final String TAG = "EnvService";
 
-    private static final Singleton<EnvService> INSTANCE = new Singleton<EnvService>() {
+    private static final Singleton<EnvService> INSTANCE = new Singleton<EnvService>()
+    {
         @Override
-        protected EnvService create() {
+        protected EnvService create()
+        {
             return new EnvService();
         }
     };
 
     private Context mApplicationContext;
 
-    private EnvService() {
+    private EnvService()
+    {
     }
 
-    public static EnvService getInstance() {
+    public static EnvService getInstance()
+    {
         return INSTANCE.get();
     }
 
     @MainThread
-    public void init(@NonNull Context context) {
-        Objects.requireNonNull(context);
-        mApplicationContext = context.getApplicationContext();
+    public void init(@NonNull Application application)
+    {
+        Objects.requireNonNull(application);
+        mApplicationContext = application.getApplicationContext();
     }
 
     @Override
-    public boolean lazyInit() {
+    public boolean lazyInit()
+    {
         return false;
     }
 
-    public Context getApplicationContext() {
+    public Context getApplicationContext()
+    {
         return mApplicationContext;
     }
 
@@ -74,7 +83,8 @@ public final class EnvService implements IInit {
      *
      * @return /data/user/0/com.yuloran.wanandroid_java/files
      */
-    public File getFilesDir() {
+    public File getFilesDir()
+    {
         File filesDir = mApplicationContext.getFilesDir();
         Logger.debug(TAG, "getFilesDir: " + filesDir);
         return filesDir;
@@ -85,9 +95,11 @@ public final class EnvService implements IInit {
      *
      * @return /data/user/0/com.yuloran.wanandroid_java/files/cache
      */
-    public File getCacheDir() {
+    public File getCacheDir()
+    {
         File cacheDir = new File(mApplicationContext.getFilesDir(), "/cache");
-        if (!cacheDir.exists()) {
+        if (!cacheDir.exists())
+        {
             boolean success = cacheDir.mkdir();
             Logger.debug(TAG, success ? "make cache dir success!" : "make cache dir failed!");
         }

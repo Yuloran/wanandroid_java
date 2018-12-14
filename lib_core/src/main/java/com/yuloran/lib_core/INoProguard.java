@@ -23,5 +23,6 @@ package com.yuloran.lib_core;
  *
  * @since 1.0.0
  */
-public interface INoProguard {
+public interface INoProguard
+{
 }

@@ -28,34 +28,42 @@ import androidx.annotation.Nullable;
  *
  * @since 1.0.0
  */
-public final class ArrayUtil {
+public final class ArrayUtil
+{
 
-    private ArrayUtil() {
+    private ArrayUtil()
+    {
     }
 
-    public static boolean isEmpty(Collection<?> collection) {
+    public static boolean isEmpty(Collection<?> collection)
+    {
         return collection == null || collection.isEmpty();
     }
 
-    public static <T> boolean isEmpty(T[] array) {
+    public static <T> boolean isEmpty(T[] array)
+    {
         return array == null || array.length == 0;
     }
 
-    public static int sizeof(Collection<?> collection) {
+    public static int sizeof(Collection<?> collection)
+    {
         return collection == null ? 0 : collection.size();
     }
 
-    public static <T> int sizeof(T[] array) {
+    public static <T> int sizeof(T[] array)
+    {
         return array == null ? 0 : array.length;
     }
 
     @Nullable
-    public static <T> T getSafely(List<T> list, int index) {
+    public static <T> T getSafely(List<T> list, int index)
+    {
         return index >= 0 && index < sizeof(list) ? list.get(index) : null;
     }
 
     @Nullable
-    public static <T> T getSafely(T[] array, int index) {
+    public static <T> T getSafely(T[] array, int index)
+    {
         return index >= 0 && index < sizeof(array) ? array[index] : null;
     }
 }

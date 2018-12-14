@@ -25,17 +25,20 @@ import com.google.gson.annotations.SerializedName;
  * Date Added: 2018/11/30 22:36
  * Version: 1.0.0
  */
-public class PageResp extends BaseResp {
+public class PageResp extends BaseResp
+{
 
     @Expose
     @SerializedName("data")
     private Page page;
 
-    public Page getPage() {
+    public Page getPage()
+    {
         return page;
     }
 
-    public void setPage(Page page) {
+    public void setPage(Page page)
+    {
         this.page = page;
     }
 

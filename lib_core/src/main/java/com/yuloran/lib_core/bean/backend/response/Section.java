@@ -27,7 +27,8 @@ import com.yuloran.lib_core.annotations.Useful;
  *
  * @since 1.0.0
  */
-public class Section {
+public class Section
+{
 
     /** 栏目id */
     @Useful
@@ -56,64 +57,79 @@ public class Section {
     @Expose
     private int visible;
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public int getOrder() {
+    public int getOrder()
+    {
         return order;
     }
 
-    public void setOrder(int order) {
+    public void setOrder(int order)
+    {
         this.order = order;
     }
 
-    public int getCourseId() {
+    public int getCourseId()
+    {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(int courseId)
+    {
         this.courseId = courseId;
     }
 
-    public int getParentChapterId() {
+    public int getParentChapterId()
+    {
         return parentChapterId;
     }
 
-    public void setParentChapterId(int parentChapterId) {
+    public void setParentChapterId(int parentChapterId)
+    {
         this.parentChapterId = parentChapterId;
     }
 
-    public boolean isUserControlSetTop() {
+    public boolean isUserControlSetTop()
+    {
         return userControlSetTop;
     }
 
-    public void setUserControlSetTop(boolean userControlSetTop) {
+    public void setUserControlSetTop(boolean userControlSetTop)
+    {
         this.userControlSetTop = userControlSetTop;
     }
 
-    public int getVisible() {
+    public int getVisible()
+    {
         return visible;
     }
 
-    public void setVisible(int visible) {
+    public void setVisible(int visible)
+    {
         this.visible = visible;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Section{" + "id=" + id + ", name='" + name + '\'' + ", parentChapterId=" + parentChapterId + ", " +
                 "order=" + order + ", courseId=" + courseId + ", userControlSetTop=" + userControlSetTop + ", " +
                 "visible=" + visible + '}';

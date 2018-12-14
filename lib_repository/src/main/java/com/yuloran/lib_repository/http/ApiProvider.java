@@ -38,13 +38,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * @since 1.0.0
  */
-public class ApiProvider {
+public class ApiProvider
+{
 
     private static final String TAG = "ApiProvider";
 
-    private static final Singleton<ApiProvider> INSTANCE = new Singleton<ApiProvider>() {
+    private static final Singleton<ApiProvider> INSTANCE = new Singleton<ApiProvider>()
+    {
         @Override
-        protected ApiProvider create() {
+        protected ApiProvider create()
+        {
             return new ApiProvider();
         }
     };
@@ -52,7 +55,8 @@ public class ApiProvider {
     @NonNull
     private Apis.IWanAndroidApi mWanAndroidApi;
 
-    private ApiProvider() {
+    private ApiProvider()
+    {
         int size = 200 * 1024 * 1024; // 200M
         Cache cache = new Cache(EnvService.getInstance().getCacheDir(), size);
 
@@ -76,12 +80,14 @@ public class ApiProvider {
         mWanAndroidApi = retrofit.create(Apis.IWanAndroidApi.class);
     }
 
-    public static ApiProvider getInstance() {
+    public static ApiProvider getInstance()
+    {
         return INSTANCE.get();
     }
 
     @NonNull
-    public Apis.IWanAndroidApi getWanAndroidApi() {
+    public Apis.IWanAndroidApi getWanAndroidApi()
+    {
         return mWanAndroidApi;
     }
 }

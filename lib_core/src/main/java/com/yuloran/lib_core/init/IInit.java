@@ -15,7 +15,7 @@
  */
 package com.yuloran.lib_core.init;
 
-import android.content.Context;
+import android.app.Application;
 
 import io.reactivex.annotations.NonNull;
 
@@ -27,7 +27,8 @@ import io.reactivex.annotations.NonNull;
  *
  * @since 1.0.0
  */
-public interface IInit {
+public interface IInit
+{
 
     /**
      * 是否可以懒初始化
@@ -39,7 +40,7 @@ public interface IInit {
     /**
      * 初始化
      *
-     * @param context application context
+     * @param application application
      */
-    void init(@NonNull Context context);
+    void init(@NonNull Application application);
 }

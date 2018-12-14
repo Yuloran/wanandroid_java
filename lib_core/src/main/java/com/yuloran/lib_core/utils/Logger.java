@@ -29,60 +29,76 @@ import androidx.annotation.NonNull;
  *
  * @since 1.0.0
  */
-public final class Logger {
+public final class Logger
+{
 
     private static final String APP_TAG = "WanAndroid";
 
     private static final boolean DEBUG = true;
 
-    private Logger() {
+    private Logger()
+    {
     }
 
-    public static void debug(@NonNull String tag, @NonNull String msg) {
-        if (DEBUG) {
+    public static void debug(@NonNull String tag, @NonNull String msg)
+    {
+        if (DEBUG)
+        {
             Log.d(APP_TAG, wrap(tag, msg));
         }
     }
 
-    public static void debug(@NonNull String tag, @NonNull String formatMsg, Object... args) {
-        if (DEBUG) {
+    public static void debug(@NonNull String tag, @NonNull String formatMsg, Object... args)
+    {
+        if (DEBUG)
+        {
             Log.d(APP_TAG, wrap(tag, formatMsg, args));
         }
     }
 
-    public static void info(@NonNull String tag, @NonNull String msg) {
-        if (DEBUG) {
+    public static void info(@NonNull String tag, @NonNull String msg)
+    {
+        if (DEBUG)
+        {
             Log.i(APP_TAG, wrap(tag, msg));
         }
     }
 
-    public static void info(@NonNull String tag, @NonNull String formatMsg, Object... args) {
-        if (DEBUG) {
+    public static void info(@NonNull String tag, @NonNull String formatMsg, Object... args)
+    {
+        if (DEBUG)
+        {
             Log.i(APP_TAG, wrap(tag, formatMsg, args));
         }
     }
 
-    public static void warn(@NonNull String tag, @NonNull String msg) {
+    public static void warn(@NonNull String tag, @NonNull String msg)
+    {
         Log.w(APP_TAG, wrap(tag, msg));
     }
 
-    public static void warn(@NonNull String tag, @NonNull String msg, Throwable t) {
+    public static void warn(@NonNull String tag, @NonNull String msg, Throwable t)
+    {
         Log.w(APP_TAG, wrap(tag, msg), t);
     }
 
-    public static void error(@NonNull String tag, @NonNull String msg) {
+    public static void error(@NonNull String tag, @NonNull String msg)
+    {
         Log.e(APP_TAG, wrap(tag, msg));
     }
 
-    public static void error(@NonNull String tag, @NonNull String msg, Throwable t) {
+    public static void error(@NonNull String tag, @NonNull String msg, Throwable t)
+    {
         Log.e(APP_TAG, wrap(tag, msg), t);
     }
 
-    private static String wrap(@NonNull String tag, @NonNull String msg) {
+    private static String wrap(@NonNull String tag, @NonNull String msg)
+    {
         return tag + ": " + msg;
     }
 
-    private static String wrap(@NonNull String tag, @NonNull String msg, Object... args) {
+    private static String wrap(@NonNull String tag, @NonNull String msg, Object... args)
+    {
         return tag + ": " + String.format(Locale.US, msg, args);
     }
 

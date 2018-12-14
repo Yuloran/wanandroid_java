@@ -31,7 +31,8 @@ import retrofit2.http.Query;
  *
  * @since 1.0.0
  */
-public interface Apis {
+public interface Apis
+{
 
     /**
      * [IWanAndroidApi]
@@ -41,7 +42,8 @@ public interface Apis {
      *
      * @since 1.0.0
      */
-    interface IWanAndroidApi {
+    interface IWanAndroidApi
+    {
 
         String BASE_URL = "http://www.wanandroid.com/";
 

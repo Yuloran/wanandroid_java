@@ -19,17 +19,11 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.trello.rxlifecycle3.components.support.RxFragmentActivity;
-import com.yuloran.lib_core.bean.backend.response.SectionResp;
-import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.lib_repository.http.ApiProvider;
 import com.yuloran.module_base.R;
+import com.yuloran.module_base.widget.ActionBar;
 
-import java.util.concurrent.Callable;
-
-import io.reactivex.Single;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * [BaseActivity]
@@ -39,35 +33,45 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @since 1.0.0
  */
-public class BaseActivity extends RxFragmentActivity {
+public class BaseActivity extends RxFragmentActivity
+{
 
     private static final String TAG = "BaseActivity";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    private ActionBar mActionBar;
 
-        findViewById(R.id.hello_world).setOnClickListener(new View.OnClickListener() {
+    private ConstraintLayout mContentRoot;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.base_activity);
+
+        mActionBar = findViewById(R.id.action_bar);
+        mActionBar.getBack().setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Disposable disposable = Single.fromCallable(new Callable<SectionResp>() {
-                    @Override
-                    public SectionResp call() throws Exception {
-                        return ApiProvider.getInstance().getWanAndroidApi().getProjects().execute().body();
-                    }
-                }).subscribeOn(Schedulers.io()).subscribe(new Consumer<SectionResp>() {
-                    @Override
-                    public void accept(SectionResp sectionResp) {
-                        Logger.debug(TAG, sectionResp.toString());
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Logger.error(TAG, "onError.", throwable);
-                    }
-                });
+            public void onClick(View v)
+            {
+                onBackPressed();
             }
         });
+        onActionBarCreated(mActionBar);
+
+        mContentRoot = findViewById(R.id.my_content_root);
+        onCreateContentLayout(mContentRoot);
     }
+
+    protected void onActionBarCreated(@NonNull ActionBar actionBar)
+    {
+
+    }
+
+    protected void onCreateContentLayout(@NonNull ConstraintLayout contentRoot)
+    {
+
+    }
+
 }

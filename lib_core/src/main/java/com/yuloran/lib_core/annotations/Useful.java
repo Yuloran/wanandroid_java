@@ -32,7 +32,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Documented
 @Target({ElementType.FIELD, ElementType.METHOD})
-public @interface Useful {
+public @interface Useful
+{
     /** 使用场景 */
     byte[] value() default {};
 }

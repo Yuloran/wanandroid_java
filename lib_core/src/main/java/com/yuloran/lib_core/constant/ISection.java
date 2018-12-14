@@ -23,7 +23,8 @@ package com.yuloran.lib_core.constant;
  *
  * @since 1.0.0
  */
-public interface ISection {
+public interface ISection
+{
     /** 微信公众号 */
     byte OFFICIAL_ACCOUNT = 0;
 

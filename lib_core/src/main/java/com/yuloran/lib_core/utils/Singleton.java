@@ -21,14 +21,18 @@ package com.yuloran.lib_core.utils;
  * <p>
  * Modeled after frameworks/base/include/utils/Singleton.h
  */
-public abstract class Singleton<T> {
+public abstract class Singleton<T>
+{
     private T mInstance;
 
     protected abstract T create();
 
-    public final T get() {
-        synchronized (this) {
-            if (mInstance == null) {
+    public final T get()
+    {
+        synchronized (this)
+        {
+            if (mInstance == null)
+            {
                 mInstance = create();
             }
             return mInstance;

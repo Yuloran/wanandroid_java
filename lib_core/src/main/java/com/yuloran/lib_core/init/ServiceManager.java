@@ -15,7 +15,7 @@
  */
 package com.yuloran.lib_core.init;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.yuloran.lib_core.utils.Singleton;
 
@@ -34,13 +34,16 @@ import androidx.annotation.NonNull;
  *
  * @since 1.0.0
  */
-public final class ServiceManager implements IInit {
+public final class ServiceManager implements IInit
+{
 
     private static final String TAG = "ServiceManager";
 
-    private static final Singleton<ServiceManager> INSTANCE = new Singleton<ServiceManager>() {
+    private static final Singleton<ServiceManager> INSTANCE = new Singleton<ServiceManager>()
+    {
         @Override
-        protected ServiceManager create() {
+        protected ServiceManager create()
+        {
             return new ServiceManager();
         }
     };
@@ -49,35 +52,45 @@ public final class ServiceManager implements IInit {
 
     {
         mServices.add(EnvService.getInstance());
+        mServices.add(ActivityMgr.getInstance());
     }
 
-    private ServiceManager() {
+    private ServiceManager()
+    {
     }
 
-    public static ServiceManager getInstance() {
+    public static ServiceManager getInstance()
+    {
         return INSTANCE.get();
     }
 
     @Override
-    public boolean lazyInit() {
+    public boolean lazyInit()
+    {
         return false;
     }
 
     @MainThread
     @Override
-    public void init(@NonNull final Context context) {
-        Objects.requireNonNull(context);
+    public void init(@NonNull final Application application)
+    {
+        Objects.requireNonNull(application);
 
-        for (final IInit init : mServices) {
-            if (init.lazyInit()) {
-                SingleWorker.submit(new Runnable() {
+        for (final IInit init : mServices)
+        {
+            if (init.lazyInit())
+            {
+                SingleWorker.submit(new Runnable()
+                {
                     @Override
-                    public void run() {
-                        init.init(context);
+                    public void run()
+                    {
+                        init.init(application);
                     }
                 });
-            } else {
-                init.init(context);
+            } else
+            {
+                init.init(application);
             }
         }
     }

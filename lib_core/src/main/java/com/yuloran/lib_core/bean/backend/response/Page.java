@@ -28,7 +28,8 @@ import java.util.List;
  * Date Added: 2018/11/30 22:35
  * Version: 1.0.0
  */
-public class Page {
+public class Page
+{
 
     /** 当前查询页码 */
     @Useful
@@ -72,59 +73,73 @@ public class Page {
     @SerializedName("datas")
     private List<Item> items;
 
-    public int getCurPage() {
+    public int getCurPage()
+    {
         return curPage;
     }
 
-    public void setCurPage(int curPage) {
+    public void setCurPage(int curPage)
+    {
         this.curPage = curPage;
     }
 
-    public int getOffset() {
+    public int getOffset()
+    {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset(int offset)
+    {
         this.offset = offset;
     }
 
-    public boolean isOver() {
+    public boolean isOver()
+    {
         return over;
     }
 
-    public void setOver(boolean over) {
+    public void setOver(boolean over)
+    {
         this.over = over;
     }
 
-    public int getPageCount() {
+    public int getPageCount()
+    {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(int pageCount)
+    {
         this.pageCount = pageCount;
     }
 
-    public int getSize() {
+    public int getSize()
+    {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(int size)
+    {
         this.size = size;
     }
 
-    public int getTotal() {
+    public int getTotal()
+    {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(int total)
+    {
         this.total = total;
     }
 
-    public List<Item> getItems() {
+    public List<Item> getItems()
+    {
         return items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Item> items)
+    {
         this.items = items;
     }
 

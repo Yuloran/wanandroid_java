@@ -30,7 +30,8 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public class Item {
+public class Item
+{
 
     /** 内容id */
     @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
@@ -135,191 +136,238 @@ public class Item {
     @Expose
     private List<TagsBean> tags;
 
-    public String getApkLink() {
+    public String getApkLink()
+    {
         return apkLink;
     }
 
-    public void setApkLink(String apkLink) {
+    public void setApkLink(String apkLink)
+    {
         this.apkLink = apkLink;
     }
 
-    public String getAuthor() {
+    public String getAuthor()
+    {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(String author)
+    {
         this.author = author;
     }
 
-    public int getChapterId() {
+    public int getChapterId()
+    {
         return chapterId;
     }
 
-    public void setChapterId(int chapterId) {
+    public void setChapterId(int chapterId)
+    {
         this.chapterId = chapterId;
     }
 
-    public String getChapterName() {
+    public String getChapterName()
+    {
         return chapterName;
     }
 
-    public void setChapterName(String chapterName) {
+    public void setChapterName(String chapterName)
+    {
         this.chapterName = chapterName;
     }
 
-    public boolean isCollect() {
+    public boolean isCollect()
+    {
         return collect;
     }
 
-    public void setCollect(boolean collect) {
+    public void setCollect(boolean collect)
+    {
         this.collect = collect;
     }
 
-    public int getCourseId() {
+    public int getCourseId()
+    {
         return courseId;
     }
 
-    public void setCourseId(int courseId) {
+    public void setCourseId(int courseId)
+    {
         this.courseId = courseId;
     }
 
-    public String getDesc() {
+    public String getDesc()
+    {
         return desc;
     }
 
-    public void setDesc(String desc) {
+    public void setDesc(String desc)
+    {
         this.desc = desc;
     }
 
-    public String getEnvelopePic() {
+    public String getEnvelopePic()
+    {
         return envelopePic;
     }
 
-    public void setEnvelopePic(String envelopePic) {
+    public void setEnvelopePic(String envelopePic)
+    {
         this.envelopePic = envelopePic;
     }
 
-    public boolean isFresh() {
+    public boolean isFresh()
+    {
         return fresh;
     }
 
-    public void setFresh(boolean fresh) {
+    public void setFresh(boolean fresh)
+    {
         this.fresh = fresh;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public String getLink() {
+    public String getLink()
+    {
         return link;
     }
 
-    public void setLink(String link) {
+    public void setLink(String link)
+    {
         this.link = link;
     }
 
-    public String getNiceDate() {
+    public String getNiceDate()
+    {
         return niceDate;
     }
 
-    public void setNiceDate(String niceDate) {
+    public void setNiceDate(String niceDate)
+    {
         this.niceDate = niceDate;
     }
 
-    public String getOrigin() {
+    public String getOrigin()
+    {
         return origin;
     }
 
-    public void setOrigin(String origin) {
+    public void setOrigin(String origin)
+    {
         this.origin = origin;
     }
 
-    public String getProjectLink() {
+    public String getProjectLink()
+    {
         return projectLink;
     }
 
-    public void setProjectLink(String projectLink) {
+    public void setProjectLink(String projectLink)
+    {
         this.projectLink = projectLink;
     }
 
-    public long getPublishTime() {
+    public long getPublishTime()
+    {
         return publishTime;
     }
 
-    public void setPublishTime(long publishTime) {
+    public void setPublishTime(long publishTime)
+    {
         this.publishTime = publishTime;
     }
 
-    public int getSuperChapterId() {
+    public int getSuperChapterId()
+    {
         return superChapterId;
     }
 
-    public void setSuperChapterId(int superChapterId) {
+    public void setSuperChapterId(int superChapterId)
+    {
         this.superChapterId = superChapterId;
     }
 
-    public String getSuperChapterName() {
+    public String getSuperChapterName()
+    {
         return superChapterName;
     }
 
-    public void setSuperChapterName(String superChapterName) {
+    public void setSuperChapterName(String superChapterName)
+    {
         this.superChapterName = superChapterName;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public int getType() {
+    public int getType()
+    {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(int type)
+    {
         this.type = type;
     }
 
-    public int getUserId() {
+    public int getUserId()
+    {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(int userId)
+    {
         this.userId = userId;
     }
 
-    public int getVisible() {
+    public int getVisible()
+    {
         return visible;
     }
 
-    public void setVisible(int visible) {
+    public void setVisible(int visible)
+    {
         this.visible = visible;
     }
 
-    public int getZan() {
+    public int getZan()
+    {
         return zan;
     }
 
-    public void setZan(int zan) {
+    public void setZan(int zan)
+    {
         this.zan = zan;
     }
 
-    public List<TagsBean> getTags() {
+    public List<TagsBean> getTags()
+    {
         return tags;
     }
 
-    public void setTags(List<TagsBean> tags) {
+    public void setTags(List<TagsBean> tags)
+    {
         this.tags = tags;
     }
 
-    public static class TagsBean {
+    public static class TagsBean
+    {
 
         /** 公众号 */
         private String name;
@@ -327,19 +375,23 @@ public class Item {
         /** /wxarticle/list/408/1 */
         private String url;
 
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
 
-        public void setName(String name) {
+        public void setName(String name)
+        {
             this.name = name;
         }
 
-        public String getUrl() {
+        public String getUrl()
+        {
             return url;
         }
 
-        public void setUrl(String url) {
+        public void setUrl(String url)
+        {
             this.url = url;
         }
     }

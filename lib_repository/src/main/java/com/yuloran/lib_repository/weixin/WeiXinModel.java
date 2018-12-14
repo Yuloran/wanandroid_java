@@ -31,11 +31,13 @@ import androidx.lifecycle.ViewModel;
  *
  * @since 1.0.0
  */
-public class WeiXinModel extends ViewModel {
+public class WeiXinModel extends ViewModel
+{
 
     private MutableLiveData<List<Section>> mOfficialAccounts = new MutableLiveData<>();
 
-    public LiveData<List<Section>> getOfficialAccounts() {
+    public LiveData<List<Section>> getOfficialAccounts()
+    {
         return mOfficialAccounts;
     }
 }

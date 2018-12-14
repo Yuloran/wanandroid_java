@@ -26,6 +26,7 @@ dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
     api "androidx.appcompat:appcompat:$rootProject.ext.appcompat_version"
     api "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintlayout_version"
+    api "com.google.android.material:material:1.1.0-alpha01"
     api "me.drakeet.multitype:multitype:$rootProject.ext.multitype_version"
     api project(':lib_repository')
 }

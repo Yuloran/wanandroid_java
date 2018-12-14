@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="page_padding_start">14dp</dimen>
+    <dimen name="page_padding_end">14dp</dimen>
+    <dimen name="actionbar_height">45dp</dimen>
+    <dimen name="button_hot_width">30dp</dimen>
+    <dimen name="button_hot_height">30dp</dimen>
+    <dimen name="button_inner_padding">5dp</dimen>
+    <dimen name="text_margin_start">8dp</dimen>
+    <dimen name="text_margin_end">5dp</dimen>
+    <dimen name="tab_height">40dp</dimen>
+</resources>

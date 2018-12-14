@@ -15,7 +15,10 @@
  */
 package com.yuloran.module_base.base;
 
+import android.os.Bundle;
+
 import com.trello.rxlifecycle3.components.support.RxFragment;
+import com.yuloran.lib_core.utils.Logger;
 
 /**
  * [BaseFragment]
@@ -25,5 +28,48 @@ import com.trello.rxlifecycle3.components.support.RxFragment;
  *
  * @since 1.0.0
  */
-public class BaseFragment extends RxFragment {
+public abstract class BaseFragment extends RxFragment
+{
+    protected boolean mIsViewInitiated;
+
+    protected boolean mIsDataLoaded;
+
+    protected abstract String logTag();
+
+    protected abstract void reallyLoad();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        mIsViewInitiated = true;
+        loadIfVisible(false);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser)
+        {
+            loadIfVisible(false);
+        }
+    }
+
+    public void loadIfVisible(boolean forceUpdate)
+    {
+        if (getUserVisibleHint() && mIsViewInitiated && (!mIsDataLoaded || forceUpdate))
+        {
+            Logger.debug(logTag(), "loadIfVisible: forceUpdate? " + forceUpdate);
+            reallyLoad();
+            return;
+        }
+        Logger.debug(logTag(), "loadIfVisible: invisible.");
+    }
 }

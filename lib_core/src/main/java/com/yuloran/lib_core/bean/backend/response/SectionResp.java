@@ -27,23 +27,27 @@ import java.util.List;
  * Date Added: 2018/11/30 22:37
  * Version:
  */
-public class SectionResp extends BaseResp {
+public class SectionResp extends BaseResp
+{
 
     /** 栏目列表 */
     @Expose
     @SerializedName("data")
     private List<Section> mSections;
 
-    public List<Section> getSections() {
+    public List<Section> getSections()
+    {
         return mSections;
     }
 
-    public void setSections(List<Section> sections) {
+    public void setSections(List<Section> sections)
+    {
         this.mSections = sections;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "SectionResp{" + "mSections=" + mSections + '}';
     }
 }
