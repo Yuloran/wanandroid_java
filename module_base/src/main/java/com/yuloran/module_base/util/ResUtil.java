@@ -15,20 +15,22 @@
  */
 package com.yuloran.module_base.util;
 
+import android.content.Context;
 import android.content.res.Resources;
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Bundle;
 
 import com.yuloran.lib_core.init.EnvService;
 import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.module_base.R;
 
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.collection.SimpleArrayMap;
+import androidx.fragment.app.Fragment;
 
 /**
  * [资源管理器]
@@ -40,56 +42,24 @@ import androidx.annotation.NonNull;
  */
 public final class ResUtil
 {
-    /** 微信公众号 */
-    public static final byte OFFICIAL_ACCOUNT = 0;
-    /** 推荐 */
-    public static final byte RECOMMEND = 1;
-    /** 知识体系 */
-    public static final byte KNOWLEDGE_STRUCTURE = 2;
-    /** 项目 */
-    public static final byte PROJECT = 3;
-    /** 导航 */
-    public static final byte NAVIGATION = 4;
-
-    private static final List<MainPage> MAIN_PAGES = new ArrayList<>(5);
-
-    static
-    {
-        MAIN_PAGES.add(new MainPage(RECOMMEND, R.string.tab_recommend));
-        MAIN_PAGES.add(new MainPage(OFFICIAL_ACCOUNT, R.string.tab_official_account));
-        MAIN_PAGES.add(new MainPage(KNOWLEDGE_STRUCTURE, R.string.tab_knowledge_structure));
-        MAIN_PAGES.add(new MainPage(PROJECT, R.string.tab_project));
-        MAIN_PAGES.add(new MainPage(NAVIGATION, R.string.tab_navigation));
-    }
-
     private static final String TAG = "ResUtil";
 
     private static Resources sResources = EnvService.getInstance().getApplicationContext().getResources();
+
+    private static final SimpleArrayMap<String, Class<?>> sClassMap = new SimpleArrayMap<String, Class<?>>();
 
     private ResUtil()
     {
     }
 
-    /**
-     * 获取主页所有pages:<br />
-     * <ol>
-     * <li>{@link #OFFICIAL_ACCOUNT}
-     * <li>{@link #RECOMMEND}
-     * <li>{@link #KNOWLEDGE_STRUCTURE}
-     * <li>{@link #PROJECT}
-     * <li>{@link #NAVIGATION}
-     * </ol>
-     *
-     * @return 主页所有tabs
-     */
-    public static List<MainPage> getMainPages()
-    {
-        return MAIN_PAGES;
-    }
-
     @NonNull
     public static List<String> getStringArray(int id)
     {
+        if (id <= 0)
+        {
+            return Collections.emptyList();
+        }
+
         try
         {
             String[] stringArray = sResources.getStringArray(id);
@@ -105,6 +75,11 @@ public final class ResUtil
     @NonNull
     public static String getString(int id)
     {
+        if (id <= 0)
+        {
+            return "";
+        }
+
         try
         {
             return sResources.getString(id);
@@ -115,66 +90,48 @@ public final class ResUtil
         return "";
     }
 
-    /** 主页类型 */
-    public static class MainPage implements Parcelable
+    /**
+     * 根据Fragment的名字反射创建Fragment，因此该Fragment必须有一个空构造器
+     *
+     * @param fullFragmentName The class name of the fragment to instantiate.
+     * @param arguments        Bundle of arguments to supply to the fragment, which it
+     *                         can retrieve with {@link Fragment#getArguments()}.  May be null.
+     * @return Returns a new fragment instance.
+     * @throws Fragment.InstantiationException If there is a failure in instantiating
+     *                                         the given fragment class.  This is a runtime exception; it is not
+     *                                         normally expected to happen.
+     */
+    public static Fragment instantiateFragment(String fullFragmentName, @Nullable Bundle arguments)
     {
-        /**
-         * one of {@link #OFFICIAL_ACCOUNT}, {@link #RECOMMEND}, {@link #KNOWLEDGE_STRUCTURE}, {@link #PROJECT},
-         * {@link #NAVIGATION}
-         */
-        private byte type;
-
-        private int titleResId;
-
-        private MainPage(byte type, int titleResId)
+        try
         {
-            this.type = type;
-            this.titleResId = titleResId;
-        }
-
-        public byte getType()
-        {
-            return type;
-        }
-
-        @NonNull
-        public String getTitle()
-        {
-            return getString(titleResId);
-        }
-
-        @Override
-        public int describeContents()
-        {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags)
-        {
-            dest.writeByte(this.type);
-            dest.writeInt(this.titleResId);
-        }
-
-        private MainPage(Parcel in)
-        {
-            this.type = in.readByte();
-            this.titleResId = in.readInt();
-        }
-
-        public static final Parcelable.Creator<MainPage> CREATOR = new Parcelable.Creator<MainPage>()
-        {
-            @Override
-            public MainPage createFromParcel(Parcel source)
+            Context context = EnvService.getInstance().getApplicationContext();
+            Class<?> clazz = sClassMap.get(fullFragmentName);
+            if (clazz == null)
             {
-                return new MainPage(source);
+                // Class not found in the cache, see if it's real, and try to add it
+                clazz = context.getClassLoader().loadClass(fullFragmentName);
+                sClassMap.put(fullFragmentName, clazz);
             }
-
-            @Override
-            public MainPage[] newArray(int size)
+            Fragment f = (Fragment) clazz.getConstructor().newInstance();
+            if (arguments != null)
             {
-                return new MainPage[size];
+                arguments.setClassLoader(f.getClass().getClassLoader());
+                f.setArguments(arguments);
             }
-        };
+            return f;
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e)
+        {
+            throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": make " +
+                    "sure class name exists, is public, and has an empty constructor that is public", e);
+        } catch (NoSuchMethodException e)
+        {
+            throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": could" +
+                    " not find Fragment constructor", e);
+        } catch (InvocationTargetException e)
+        {
+            throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": " +
+                    "calling Fragment" + " constructor caused an exception", e);
+        }
     }
 }

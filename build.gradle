@@ -41,6 +41,9 @@ ext {
     // recyclerView adapter, support multi type items
     multitype_version = '3.5.0'
 
+    // ViewModel and LiveData
+    lifecycle_version = "2.0.0"
+
     rxandroid_version = '2.1.0'
     rxjava_version = '2.2.3'
     rxlifecycle_version = '3.0.0'

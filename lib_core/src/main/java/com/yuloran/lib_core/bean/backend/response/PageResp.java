@@ -27,7 +27,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class PageResp extends BaseResp
 {
-
     @Expose
     @SerializedName("data")
     private Page page;

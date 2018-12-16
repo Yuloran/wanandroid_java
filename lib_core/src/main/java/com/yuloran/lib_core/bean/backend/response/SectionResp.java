@@ -29,7 +29,6 @@ import java.util.List;
  */
 public class SectionResp extends BaseResp
 {
-
     /** 栏目列表 */
     @Expose
     @SerializedName("data")

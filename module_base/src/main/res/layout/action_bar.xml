@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.yuloran.module_base.widget.ActionBar xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yuloran.module_base.ui.widget.ActionBar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_action_bar"
     android:layout_width="match_parent"
@@ -53,4 +53,4 @@
         android:visibility="gone"
         tools:src="@drawable/ic_search_white"
         tools:visibility="visible" />
-</com.yuloran.module_base.widget.ActionBar>
+</com.yuloran.module_base.ui.widget.ActionBar>

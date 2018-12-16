@@ -18,11 +18,11 @@ package com.yuloran.lib_repository.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yuloran.lib_core.init.EnvService;
-import com.yuloran.lib_core.utils.Singleton;
+import com.yuloran.lib_core.template.Singleton;
+import com.yuloran.lib_repository.http.interceptor.RequestHeadersInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.annotations.NonNull;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -31,7 +31,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * [ApiProvider]
+ * [创建OkHttpClient，对外提供服务器访问接口]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/1 16:58
@@ -40,7 +40,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiProvider
 {
-
     private static final String TAG = "ApiProvider";
 
     private static final Singleton<ApiProvider> INSTANCE = new Singleton<ApiProvider>()
@@ -52,31 +51,16 @@ public class ApiProvider
         }
     };
 
-    @NonNull
     private Apis.IWanAndroidApi mWanAndroidApi;
 
     private ApiProvider()
     {
-        int size = 200 * 1024 * 1024; // 200M
-        Cache cache = new Cache(EnvService.getInstance().getCacheDir(), size);
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient client = new OkHttpClient.Builder().cache(cache)
-                                                        .addInterceptor(logging)
-                                                        .readTimeout(10, TimeUnit.SECONDS)
-                                                        .writeTimeout(10, TimeUnit.SECONDS)
-                                                        .build();
-
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Apis.IWanAndroidApi.BASE_URL)
                                                   .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                                                   .addConverterFactory(GsonConverterFactory.create(gson))
-                                                  .client(client)
+                                                  .client(initOkHttpClient())
                                                   .build();
-
         mWanAndroidApi = retrofit.create(Apis.IWanAndroidApi.class);
     }
 
@@ -85,9 +69,31 @@ public class ApiProvider
         return INSTANCE.get();
     }
 
-    @NonNull
     public Apis.IWanAndroidApi getWanAndroidApi()
     {
         return mWanAndroidApi;
+    }
+
+    private OkHttpClient initOkHttpClient()
+    {
+        // 报文缓存 100M
+        int size = 100 * 1024 * 1024;
+        Cache cache = new Cache(EnvService.getInstance().getCacheDir(), size);
+
+        // 日志拦截器
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        // 请求头拦截器
+        RequestHeadersInterceptor headersInterceptor = new RequestHeadersInterceptor();
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.cache(cache)
+               .addInterceptor(loggingInterceptor)
+               .addInterceptor(headersInterceptor)
+               .connectTimeout(10, TimeUnit.SECONDS)
+               .readTimeout(15, TimeUnit.SECONDS)
+               .writeTimeout(15, TimeUnit.SECONDS);
+        return builder.build();
     }
 }

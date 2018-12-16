@@ -31,7 +31,6 @@ import androidx.annotation.NonNull;
  */
 public final class Logger
 {
-
     private static final String APP_TAG = "WanAndroid";
 
     private static final boolean DEBUG = true;
@@ -77,9 +76,19 @@ public final class Logger
         Log.w(APP_TAG, wrap(tag, msg));
     }
 
+    public static void warn(@NonNull String tag, @NonNull String formatMsg, Object... args)
+    {
+        Log.w(APP_TAG, wrap(tag, formatMsg, args));
+    }
+
     public static void warn(@NonNull String tag, @NonNull String msg, Throwable t)
     {
         Log.w(APP_TAG, wrap(tag, msg), t);
+    }
+
+    public static void warn(@NonNull String tag, Throwable t, @NonNull String formatMsg, Object... args)
+    {
+        Log.w(APP_TAG, wrap(tag, formatMsg, args), t);
     }
 
     public static void error(@NonNull String tag, @NonNull String msg)
@@ -87,9 +96,19 @@ public final class Logger
         Log.e(APP_TAG, wrap(tag, msg));
     }
 
+    public static void error(@NonNull String tag, @NonNull String formatMsg, Object... args)
+    {
+        Log.e(APP_TAG, wrap(tag, formatMsg, args));
+    }
+
     public static void error(@NonNull String tag, @NonNull String msg, Throwable t)
     {
         Log.e(APP_TAG, wrap(tag, msg), t);
+    }
+
+    public static void error(@NonNull String tag, Throwable t, @NonNull String formatMsg, Object... args)
+    {
+        Log.e(APP_TAG, wrap(tag, formatMsg, args), t);
     }
 
     private static String wrap(@NonNull String tag, @NonNull String msg)
@@ -101,5 +120,4 @@ public final class Logger
     {
         return tag + ": " + String.format(Locale.US, msg, args);
     }
-
 }

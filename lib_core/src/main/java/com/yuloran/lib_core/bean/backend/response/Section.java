@@ -17,6 +17,7 @@ package com.yuloran.lib_core.bean.backend.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yuloran.lib_core.INoProguard;
 import com.yuloran.lib_core.annotations.Useful;
 
 /**
@@ -27,9 +28,8 @@ import com.yuloran.lib_core.annotations.Useful;
  *
  * @since 1.0.0
  */
-public class Section
+public class Section implements INoProguard
 {
-
     /** 栏目id */
     @Useful
     @Expose

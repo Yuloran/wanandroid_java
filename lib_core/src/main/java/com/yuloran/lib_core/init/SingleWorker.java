@@ -34,7 +34,6 @@ import androidx.annotation.NonNull;
  */
 public final class SingleWorker
 {
-
     private static final String TAG = "SingleWorker";
 
     private static final ExecutorService mSingleExecutorService = Executors.newSingleThreadExecutor();

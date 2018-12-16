@@ -29,7 +29,6 @@ import io.reactivex.annotations.NonNull;
  */
 public interface IInit
 {
-
     /**
      * 是否可以懒初始化
      *

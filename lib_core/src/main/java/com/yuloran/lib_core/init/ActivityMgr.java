@@ -20,7 +20,7 @@ import android.app.Application;
 import android.os.Bundle;
 
 import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.lib_core.utils.Singleton;
+import com.yuloran.lib_core.template.Singleton;
 
 import io.reactivex.annotations.NonNull;
 

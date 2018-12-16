@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.yuloran.module_base.widget.NoScrollableViewPager
+        <com.yuloran.module_base.ui.widget.NoScrollableViewPager
             android:id="@+id/my_view_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"

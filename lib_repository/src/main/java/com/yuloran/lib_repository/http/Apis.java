@@ -18,13 +18,13 @@ package com.yuloran.lib_repository.http;
 import com.yuloran.lib_core.bean.backend.response.PageResp;
 import com.yuloran.lib_core.bean.backend.response.SectionResp;
 
-import retrofit2.Call;
+import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * [Apis]
+ * [服务器接口定义]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/1 16:59
@@ -33,9 +33,8 @@ import retrofit2.http.Query;
  */
 public interface Apis
 {
-
     /**
-     * [IWanAndroidApi]
+     * [玩Android开发API]
      * <p>
      * Author: Yuloran
      * Date Added: 2018/12/1 17:48
@@ -53,7 +52,7 @@ public interface Apis
          * @return {@link SectionResp}
          */
         @GET("wxarticle/chapters/json")
-        Call<SectionResp> getOfficialAccounts();
+        Flowable<SectionResp> getOfficialAccounts();
 
         /**
          * 查看某个公众号历史数据
@@ -63,7 +62,7 @@ public interface Apis
          * @return {@link PageResp}
          */
         @GET("wxarticle/list/{id}/{page}/json")
-        Call<PageResp> getOfficialAccountArticles(@Path("id") String id, @Path("page") String page);
+        Flowable<PageResp> getOfficialAccountArticles(@Path("id") String id, @Path("page") String page);
 
         /**
          * 在某个公众号中搜索历史文章
@@ -74,8 +73,8 @@ public interface Apis
          * @return {@link PageResp}
          */
         @GET("wxarticle/list/{id}/{page}/json")
-        Call<PageResp> searchOfficialAccountArticles(@Path("id") String id, @Path("page") String page, @Query("k")
-                String keyword);
+        Flowable<PageResp> searchOfficialAccountArticles(@Path("id") String id, @Path("page") String page, @Query
+                ("k") String keyword);
 
         /**
          * 获取项目分类
@@ -83,7 +82,7 @@ public interface Apis
          * @return {@link SectionResp}
          */
         @GET("project/tree/json")
-        Call<SectionResp> getProjects();
+        Flowable<SectionResp> getProjects();
 
         /**
          * 查询项目列表数据
@@ -93,6 +92,6 @@ public interface Apis
          * @return {@link PageResp}
          */
         @GET("project/list/{page}/json")
-        Call<PageResp> getProjectItems(@Path("page") String page, @Query("cid") String sectionId);
+        Flowable<PageResp> getProjectItems(@Path("page") String page, @Query("cid") String sectionId);
     }
 }

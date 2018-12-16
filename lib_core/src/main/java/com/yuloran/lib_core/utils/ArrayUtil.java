@@ -30,7 +30,6 @@ import androidx.annotation.Nullable;
  */
 public final class ArrayUtil
 {
-
     private ArrayUtil()
     {
     }

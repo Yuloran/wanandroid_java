@@ -18,8 +18,8 @@ package com.yuloran.wanandroid_java.ui;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
-import com.yuloran.module_base.base.BaseActivity;
-import com.yuloran.module_base.widget.ActionBar;
+import com.yuloran.module_base.ui.base.BaseActivity;
+import com.yuloran.module_base.ui.widget.ActionBar;
 import com.yuloran.wanandroid_java.R;
 
 import androidx.annotation.NonNull;
@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         mViewPager = mRootView.findViewById(R.id.my_view_pager);
         mBottomTab = mRootView.findViewById(R.id.my_tab_layout);
 
-        mViewPager.setAdapter(new MainPageAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new MainTabPagerAdapter(getSupportFragmentManager()));
         mViewPager.addOnPageChangeListener(this);
         mBottomTab.setupWithViewPager(mViewPager);
     }

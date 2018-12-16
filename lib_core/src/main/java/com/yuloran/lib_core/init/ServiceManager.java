@@ -17,7 +17,7 @@ package com.yuloran.lib_core.init;
 
 import android.app.Application;
 
-import com.yuloran.lib_core.utils.Singleton;
+import com.yuloran.lib_core.template.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,6 @@ import androidx.annotation.NonNull;
  */
 public final class ServiceManager implements IInit
 {
-
     private static final String TAG = "ServiceManager";
 
     private static final Singleton<ServiceManager> INSTANCE = new Singleton<ServiceManager>()

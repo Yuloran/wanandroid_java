@@ -17,6 +17,7 @@ package com.yuloran.lib_core.bean.backend.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yuloran.lib_core.INoProguard;
 import com.yuloran.lib_core.annotations.Useful;
 import com.yuloran.lib_core.constant.ISection;
 
@@ -30,9 +31,8 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public class Item
+public class Item implements INoProguard
 {
-
     /** 内容id */
     @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
     @Expose

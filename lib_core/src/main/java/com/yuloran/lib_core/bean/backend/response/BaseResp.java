@@ -17,6 +17,7 @@ package com.yuloran.lib_core.bean.backend.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.yuloran.lib_core.INoProguard;
 
 /**
  * [BaseResp]
@@ -26,9 +27,8 @@ import com.google.gson.annotations.SerializedName;
  *
  * @since 1.0.0
  */
-public class BaseResp
+public class BaseResp implements INoProguard
 {
-
     /** 错误码 */
     @Expose
     @SerializedName("errorCode")
@@ -59,4 +59,8 @@ public class BaseResp
         this.errorMsg = errorMsg;
     }
 
+    public boolean isSuccessful()
+    {
+        return errorCode == 0;
+    }
 }
