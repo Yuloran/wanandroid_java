@@ -16,6 +16,7 @@
 package com.yuloran.lib_core.utils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -64,5 +65,10 @@ public final class ArrayUtil
     public static <T> T getSafely(T[] array, int index)
     {
         return index >= 0 && index < sizeof(array) ? array[index] : null;
+    }
+
+    public static <T> List<T> nonNull(List<T> list)
+    {
+        return list == null ? Collections.<T>emptyList() : list;
     }
 }

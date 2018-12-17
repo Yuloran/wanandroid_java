@@ -32,34 +32,6 @@ import androidx.annotation.NonNull;
  */
 public final class TabConfig
 {
-    public enum Tab
-    {
-        /** 微信公众号 */
-        RECOMMEND(com.yuloran.module_base.R.string.tab_recommend),
-        /** 推荐 */
-        OFFICIAL_ACCOUNT(com.yuloran.module_base.R.string.tab_official_account),
-        /** 知识体系 */
-        KNOWLEDGE_STRUCTURE(com.yuloran.module_base.R.string.tab_knowledge_structure),
-        /** 项目 */
-        PROJECT(com.yuloran.module_base.R.string.tab_project),
-        /** 导航 */
-        NAVIGATION(com.yuloran.module_base.R.string.tab_navigation);
-
-        /** 页面标题的字符串id */
-        private int mTitleResId;
-
-        Tab(int titleResId)
-        {
-            mTitleResId = titleResId;
-        }
-
-        @NonNull
-        public String getTitle()
-        {
-            return ResUtil.getString(mTitleResId);
-        }
-    }
-
     private static final String TAG = "TabConfig";
 
     private static final List<Tab> MAIN_TABS = new ArrayList<>(5);
@@ -92,5 +64,33 @@ public final class TabConfig
     static List<Tab> getMainTabs()
     {
         return MAIN_TABS;
+    }
+
+    public enum Tab
+    {
+        /** 微信公众号 */
+        RECOMMEND(com.yuloran.module_base.R.string.tab_recommend),
+        /** 推荐 */
+        OFFICIAL_ACCOUNT(com.yuloran.module_base.R.string.tab_official_account),
+        /** 知识体系 */
+        KNOWLEDGE_STRUCTURE(com.yuloran.module_base.R.string.tab_knowledge_structure),
+        /** 项目 */
+        PROJECT(com.yuloran.module_base.R.string.tab_project),
+        /** 导航 */
+        NAVIGATION(com.yuloran.module_base.R.string.tab_navigation);
+
+        /** 页面标题的字符串id */
+        private int mTitleResId;
+
+        Tab(int titleResId)
+        {
+            mTitleResId = titleResId;
+        }
+
+        @NonNull
+        public String getTitle()
+        {
+            return ResUtil.getString(mTitleResId);
+        }
     }
 }

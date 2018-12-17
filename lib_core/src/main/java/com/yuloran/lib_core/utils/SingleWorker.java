@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.lib_core.init;
+package com.yuloran.lib_core.utils;
 
 import java.util.Objects;
 import java.util.concurrent.Callable;

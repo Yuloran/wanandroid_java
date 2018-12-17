@@ -15,7 +15,7 @@
  */
 package com.yuloran.lib_repository.model;
 
-import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.LifecycleProvider;
 import com.yuloran.lib_core.bean.backend.response.Section;
 import com.yuloran.lib_core.bean.backend.response.SectionResp;
 import com.yuloran.lib_core.utils.ArrayUtil;
@@ -52,55 +52,22 @@ public class OfficialAccountModel
 {
     private static final String TAG = "OfficialAccountModel";
 
-    public LiveData<List<OfficialAccount>> getOfficialAccounts(LifecycleTransformer<List<OfficialAccount>>
-                                                                       lifecycleTransformer)
+    @NonNull
+    public LiveData<List<OfficialAccount>> getOfficialAccounts()
     {
         OfficialAccountDao officialAccountDao = AppDatabase.getInstance().officialAccountDao();
-        LiveData<List<OfficialAccount>> accounts = officialAccountDao.query();
-        invalidate(lifecycleTransformer);
-        return accounts;
+        return officialAccountDao.query();
     }
 
-    public void invalidate(LifecycleTransformer<List<OfficialAccount>> lifecycleTransformer)
+    public <T> void fetch(LifecycleProvider<T> lifecycleProvider)
     {
         ApiProvider.getInstance()
                    .getWanAndroidApi()
                    .getOfficialAccounts()
                    .filter(new ResponsePredicate<>())
-                   .map(new Function<SectionResp, List<OfficialAccount>>()
-                   {
-                       @Override
-                       public List<OfficialAccount> apply(SectionResp sectionResp) throws Exception
-                       {
-                           List<Section> sections = sectionResp.getSections();
-                           Logger.info(TAG, "getOfficialAccounts$map: " + sections);
-                           if (!ArrayUtil.isEmpty(sections))
-                           {
-                               List<OfficialAccount> accounts = new ArrayList<>(sections.size());
-                               for (Section section : sections)
-                               {
-                                   String name = section.getName();
-                                   if (StringUtil.isEmpty(name))
-                                   {
-                                       continue;
-                                   }
-                                   accounts.add(new OfficialAccount(section.getId(), name));
-                               }
-                               return accounts;
-                           }
-                           return Collections.emptyList();
-                       }
-                   })
-                   .doOnNext(new Consumer<List<OfficialAccount>>()
-                   {
-                       @Override
-                       public void accept(List<OfficialAccount> officialAccounts) throws Exception
-                       {
-                           Logger.info(TAG, "getOfficialAccounts$doOnNext: " + officialAccounts);
-                           AppDatabase.getInstance().officialAccountDao().bulkInsert(officialAccounts);
-                       }
-                   })
-                   .compose(lifecycleTransformer)
+                   .map(new SectionResp2Accounts())
+                   .doOnNext(new CacheAccounts())
+                   .compose(lifecycleProvider.<List<OfficialAccount>>bindToLifecycle())
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(new CommonRequestSubscriber<List<OfficialAccount>>()
@@ -117,5 +84,44 @@ public class OfficialAccountModel
                            Logger.error(TAG, "getOfficialAccounts$onError: errCode:%d, errMsg:%s.", errCode, errMsg);
                        }
                    });
+    }
+
+    private static class SectionResp2Accounts implements Function<SectionResp, List<OfficialAccount>>
+    {
+        @Override
+        public List<OfficialAccount> apply(SectionResp sectionResp) throws Exception
+        {
+            List<Section> sections = sectionResp.getSections();
+            Logger.info(TAG, "getOfficialAccounts$map: " + sections);
+            if (!ArrayUtil.isEmpty(sections))
+            {
+                List<OfficialAccount> accounts = new ArrayList<>(sections.size());
+                for (Section section : sections)
+                {
+                    String name = section.getName();
+                    if (StringUtil.isEmpty(name))
+                    {
+                        continue;
+                    }
+                    accounts.add(new OfficialAccount(section.getId(), name));
+                }
+                return accounts;
+            }
+            return Collections.emptyList();
+        }
+    }
+
+    private static class CacheAccounts implements Consumer<List<OfficialAccount>>
+    {
+        @Override
+        public void accept(List<OfficialAccount> officialAccounts) throws Exception
+        {
+            Logger.info(TAG, "getOfficialAccounts$doOnNext: " + officialAccounts);
+            // 使用liveData的问题：此处为增量更新，即有删除、更新、新增。这些操作是一个整体，
+            // 但是liveData每个操作都会回调onChange()。
+            // TODO Room通过创建触发器监听表的修改(UPDATE, DELETE, INSERT), 需要修复多余回调问题
+            // TODO (1) 使用RxJava的debounce (2) 返回普通类型，自行封装为LiveData(推荐!)
+            AppDatabase.getInstance().officialAccountDao().bulkInsert(officialAccounts);
+        }
     }
 }

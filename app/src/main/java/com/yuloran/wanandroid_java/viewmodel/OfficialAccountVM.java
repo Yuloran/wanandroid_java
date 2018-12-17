@@ -15,8 +15,9 @@
  */
 package com.yuloran.wanandroid_java.viewmodel;
 
-import com.trello.rxlifecycle3.LifecycleTransformer;
+import com.trello.rxlifecycle3.LifecycleProvider;
 import com.yuloran.lib_core.utils.Logger;
+import com.yuloran.lib_core.utils.ThreadUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.model.OfficialAccountModel;
 
@@ -48,17 +49,22 @@ public class OfficialAccountVM extends ViewModel
     }
 
     @MainThread
-    public LiveData<List<OfficialAccount>> getAccounts(LifecycleTransformer<List<OfficialAccount>> lifecycleTransformer)
+    public LiveData<List<OfficialAccount>> getAccounts()
     {
+        ThreadUtil.assertMainThread("getAccounts");
+
         if (mAccounts == null)
         {
             Logger.info(TAG, "getAccounts: init accounts liveData.");
-            mAccounts = mModel.getOfficialAccounts(lifecycleTransformer);
-        } else
-        {
-            Logger.info(TAG, "getAccounts: invalidate accounts liveData.");
-            mModel.invalidate(lifecycleTransformer);
+            mAccounts = mModel.getOfficialAccounts();
         }
         return mAccounts;
     }
+
+    public <T> void fetch(LifecycleProvider<T> lifecycleProvider)
+    {
+        Logger.info(TAG, "fetch: cache expired, fetch from server.");
+        mModel.fetch(lifecycleProvider);
+    }
+
 }

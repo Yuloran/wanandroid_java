@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yuloran.lib_core.init.EnvService;
 import com.yuloran.lib_core.template.Singleton;
+import com.yuloran.lib_repository.http.interceptor.CacheControlInterceptor;
 import com.yuloran.lib_repository.http.interceptor.RequestHeadersInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -55,10 +56,9 @@ public class ApiProvider
 
     private ApiProvider()
     {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Apis.IWanAndroidApi.BASE_URL)
                                                   .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                                                  .addConverterFactory(GsonConverterFactory.create(gson))
+                                                  .addConverterFactory(GsonConverterFactory.create(initGson()))
                                                   .client(initOkHttpClient())
                                                   .build();
         mWanAndroidApi = retrofit.create(Apis.IWanAndroidApi.class);
@@ -74,9 +74,14 @@ public class ApiProvider
         return mWanAndroidApi;
     }
 
+    private Gson initGson()
+    {
+        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    }
+
     private OkHttpClient initOkHttpClient()
     {
-        // 报文缓存 100M
+        // 缓存大小 100M
         int size = 100 * 1024 * 1024;
         Cache cache = new Cache(EnvService.getInstance().getCacheDir(), size);
 
@@ -87,10 +92,14 @@ public class ApiProvider
         // 请求头拦截器
         RequestHeadersInterceptor headersInterceptor = new RequestHeadersInterceptor();
 
+        // 缓存控制拦截器
+        CacheControlInterceptor cacheControlInterceptor = new CacheControlInterceptor();
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.cache(cache)
                .addInterceptor(loggingInterceptor)
                .addInterceptor(headersInterceptor)
+               .addNetworkInterceptor(cacheControlInterceptor)
                .connectTimeout(10, TimeUnit.SECONDS)
                .readTimeout(15, TimeUnit.SECONDS)
                .writeTimeout(15, TimeUnit.SECONDS);

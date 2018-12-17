@@ -32,22 +32,22 @@ import io.reactivex.annotations.NonNull;
  *
  * @since 1.0.0
  */
-public final class ActivityMgr implements IInit, Application.ActivityLifecycleCallbacks
+public final class ActivityMgrService implements IInit, Application.ActivityLifecycleCallbacks
 {
-    private static final String TAG = "ActivityMgr";
+    private static final String TAG = "ActivityMgrService";
 
-    private static final Singleton<ActivityMgr> INSTANCE = new Singleton<ActivityMgr>()
+    private static final Singleton<ActivityMgrService> INSTANCE = new Singleton<ActivityMgrService>()
     {
         @Override
-        protected ActivityMgr create()
+        protected ActivityMgrService create()
         {
-            return new ActivityMgr();
+            return new ActivityMgrService();
         }
     };
 
     private Activity mActiveActivity;
 
-    private ActivityMgr()
+    private ActivityMgrService()
     {
     }
 
@@ -73,7 +73,7 @@ public final class ActivityMgr implements IInit, Application.ActivityLifecycleCa
         application.registerActivityLifecycleCallbacks(this);
     }
 
-    public static ActivityMgr getInstance()
+    public static ActivityMgrService getInstance()
     {
         return INSTANCE.get();
     }

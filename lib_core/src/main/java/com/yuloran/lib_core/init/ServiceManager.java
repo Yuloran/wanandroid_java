@@ -18,6 +18,7 @@ package com.yuloran.lib_core.init;
 import android.app.Application;
 
 import com.yuloran.lib_core.template.Singleton;
+import com.yuloran.lib_core.utils.SingleWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,8 @@ public final class ServiceManager implements IInit
 
     {
         mServices.add(EnvService.getInstance());
-        mServices.add(ActivityMgr.getInstance());
+        mServices.add(ActivityMgrService.getInstance());
+        mServices.add(NetworkService.getInstance());
     }
 
     private ServiceManager()

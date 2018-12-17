@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * [知识体系的Fragment]
+ * [BaseRecyclerViewFragment]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/14 18:53

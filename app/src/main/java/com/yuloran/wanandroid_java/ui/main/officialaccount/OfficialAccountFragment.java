@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.module_base.ui.base.BaseTabLayoutViewPagerFragment;
@@ -44,7 +45,11 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
 {
     private static final String TAG = "OfficialAccountFragment";
 
+    private OfficialAccountVM mAccountVM;
+
     private OfficialAccountPagerAdapter mPagerAdapter;
+
+    private int fetchCount;
 
     @Override
     protected String logTag()
@@ -57,28 +62,36 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
     {
         super.onCreate(savedInstanceState);
 
-        OfficialAccountVM vm = ViewModelProviders.of(this).get(OfficialAccountVM.class);
-        vm.getAccounts(this.<List<OfficialAccount>>bindToLifecycle())
-          .observe(this, new Observer<List<OfficialAccount>>()
-          {
-              @Override
-              public void onChanged(List<OfficialAccount> officialAccounts)
-              {
-                  Logger.info(TAG, "onChanged: " + officialAccounts);
+        mAccountVM = ViewModelProviders.of(this).get(OfficialAccountVM.class);
+        mAccountVM.getAccounts().observe(this, new Observer<List<OfficialAccount>>()
+        {
+            @Override
+            public void onChanged(List<OfficialAccount> officialAccounts)
+            {
+                Logger.info(TAG, "onChanged: " + officialAccounts);
 
-                  if (mPagerAdapter == null)
-                  {
-                      Logger.info(TAG, "onChanged: init pagerAdapter.");
-                      mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), officialAccounts);
-                      mViewPager.setAdapter(mPagerAdapter);
-                      return;
-                  }
+                officialAccounts = ArrayUtil.nonNull(officialAccounts);
 
-                  Logger.info(TAG, "onChanged: update data source.");
-                  mPagerAdapter.setDataSource(officialAccounts);
-                  mPagerAdapter.notifyDataSetChanged();
-              }
-          });
+                // 仅fetch一次，否则当服务器数据为空时，会进入死循环
+                if (officialAccounts.isEmpty() && fetchCount == 0)
+                {
+                    fetchCount++;
+                    mAccountVM.fetch(OfficialAccountFragment.this);
+                }
+
+                if (mPagerAdapter == null)
+                {
+                    Logger.info(TAG, "onChanged: init pagerAdapter.");
+                    mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), officialAccounts);
+                    mViewPager.setAdapter(mPagerAdapter);
+                    return;
+                }
+
+                Logger.info(TAG, "onChanged: update data source.");
+                mPagerAdapter.setDataSource(officialAccounts);
+                mPagerAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Nullable
