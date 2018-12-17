@@ -132,7 +132,7 @@ public final class NetworkService implements IInit
             return;
         }
 
-        // case1. 如果仅连接mobile或wifi其中一种：则连接onAvailable()，断开onLost()
+        // case1. 如果仅连接mobile或wifi其中一种：则连接时回调onAvailable()，断开时回调onLost()
         // case2. 如果mobile与wifi同时连接：则mobile断开或连接不会触发任何回调
         // case3. 如果mobile与wifi同时连接：
         //        (1) 断开wifi：wifi.onLost()->mobile.onAvailable().

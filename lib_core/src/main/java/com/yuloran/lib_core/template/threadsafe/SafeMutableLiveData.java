@@ -38,7 +38,8 @@ public final class SafeMutableLiveData<T> extends LiveData<T>
     /**
      * Sets the value. If there are active observers, the value will be dispatched to them.
      * <p>
-     * This method can be called from any thread. And only the updated value will be dispatched.
+     * This method can be called from any thread. And the new value will be dispatched only when it not equals the
+     * last value, equals is determined by {@link Objects#equals(Object, Object)}.
      *
      * @param value The new value
      */
@@ -65,7 +66,7 @@ public final class SafeMutableLiveData<T> extends LiveData<T>
      * Note that calling this method on a background thread does not guarantee that the latest
      * value set will be received.
      *
-     * @param defaultValue if the current value is null
+     * @param defaultValue the default value
      * @return returns the default value if the current value is null
      */
     @NonNull
