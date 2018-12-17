@@ -16,54 +16,56 @@
 package com.yuloran.wanandroid_java.viewmodel;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
+import com.yuloran.lib_core.bean.backend.response.Item;
+import com.yuloran.lib_core.template.threadsafe.SafeMutableLiveData;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.ThreadUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
-import com.yuloran.lib_repository.model.OfficialAccountModel;
+import com.yuloran.lib_repository.model.AccountArticleModel;
 
 import java.util.List;
 
 import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 /**
- * [微信公众号ViewModel]
+ * [公众号文章ViewModel]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/16 11:19
+ * Date Added: 2018/12/17 19:58
  *
  * @since 1.0.0
  */
-public class OfficialAccountVM extends ViewModel
+public class AccountArticleVM extends ViewModel
 {
-    private static final String TAG = "OfficialAccountVM";
+    private static final String TAG = "AccountArticleVM";
 
-    private final OfficialAccountModel mModel;
+    private AccountArticleModel mModel;
 
-    private LiveData<List<OfficialAccount>> mAccounts;
+    private SafeMutableLiveData<List<Item>> mArticles;
 
-    public OfficialAccountVM()
+    public AccountArticleVM()
     {
-        mModel = new OfficialAccountModel();
+        mModel = new AccountArticleModel();
     }
 
+    @NonNull
     @MainThread
-    public LiveData<List<OfficialAccount>> getAccounts()
+    public LiveData<List<Item>> getArticles()
     {
-        ThreadUtil.assertMainThread("getAccounts");
-        if (mAccounts == null)
+        ThreadUtil.assertMainThread("getArticles");
+        if (mArticles == null)
         {
-            Logger.info(TAG, "getAccounts: init accounts liveData.");
-            mAccounts = mModel.getOfficialAccounts();
+            mArticles = mModel.getArticles();
         }
-        return mAccounts;
+        return mArticles;
     }
 
-    public <T> void fetch(LifecycleProvider<T> lifecycleProvider)
+    public <T> void fetch(@NonNull OfficialAccount account, LifecycleProvider<T> lifecycleProvider)
     {
         Logger.info(TAG, "fetch: cache expired, fetch from server.");
-        mModel.fetch(lifecycleProvider);
+        mModel.fetch(account, lifecycleProvider);
     }
-
 }

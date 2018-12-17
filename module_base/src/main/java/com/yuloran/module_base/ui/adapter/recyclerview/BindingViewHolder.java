@@ -13,33 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.lib_core.utils;
+package com.yuloran.module_base.ui.adapter.recyclerview;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * [字符串工具类]
+ * [ViewHolder for DataBinding]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/14 22:37
+ * Date Added: 2018/12/17 16:18
  *
  * @since 1.0.0
  */
-public final class StringUtil
+public class BindingViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder
 {
-    private StringUtil()
-    {
-    }
+    @NonNull
+    protected final T mBinding;
 
-    public static boolean isEmpty(String str)
+    BindingViewHolder(@NonNull T binding)
     {
-        return str == null || str.isEmpty();
+        super(binding.getRoot());
+        mBinding = binding;
     }
 
     @NonNull
-    public static String emptyIfNull(@Nullable String original)
+    public T getBinding()
     {
-        return original == null ? "" : original;
+        return mBinding;
     }
 }

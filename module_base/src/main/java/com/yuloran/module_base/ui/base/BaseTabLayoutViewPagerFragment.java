@@ -43,6 +43,8 @@ public abstract class BaseTabLayoutViewPagerFragment extends BaseFragment
     protected TabLayout mTabLayout;
     protected ViewPager mViewPager;
 
+    public abstract void onViewCreated();
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
@@ -53,6 +55,7 @@ public abstract class BaseTabLayoutViewPagerFragment extends BaseFragment
         mTabLayout = mRootView.findViewById(R.id.my_tab_layout);
         mViewPager = mRootView.findViewById(R.id.my_view_pager);
         mTabLayout.setupWithViewPager(mViewPager);
+        onViewCreated();
         return mRootView;
     }
 }

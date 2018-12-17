@@ -67,6 +67,43 @@ public final class ArrayUtil
         return index >= 0 && index < sizeof(array) ? array[index] : null;
     }
 
+    /**
+     * 从集合中安全删除元素
+     *
+     * @param list  集合
+     * @param index 要删除的元素索引
+     * @param <T>   元素类型
+     * @return 删除前的元素
+     */
+    @Nullable
+    public static <T> T removeSafely(List<T> list, int index)
+    {
+        if (index >= 0 && index < sizeof(list))
+        {
+            return list.remove(index);
+        }
+        return null;
+    }
+
+    /**
+     * 替换集合中index对应的元素
+     *
+     * @param list  集合
+     * @param index 要更新的位置
+     * @param item  新的元素
+     * @param <T>   元素类型
+     * @return 更新前的元素
+     */
+    @Nullable
+    public static <T> T setSafely(List<T> list, int index, T item)
+    {
+        if (index >= 0 && index < sizeof(list))
+        {
+            return list.set(index, item);
+        }
+        return null;
+    }
+
     public static <T> List<T> nonNull(List<T> list)
     {
         return list == null ? Collections.<T>emptyList() : list;

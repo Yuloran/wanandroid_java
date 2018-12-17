@@ -38,8 +38,8 @@ public final class TabConfig
 
     static
     {
-        MAIN_TABS.add(Tab.RECOMMEND);
         MAIN_TABS.add(Tab.OFFICIAL_ACCOUNT);
+        MAIN_TABS.add(Tab.RECOMMEND);
         MAIN_TABS.add(Tab.KNOWLEDGE_STRUCTURE);
         MAIN_TABS.add(Tab.PROJECT);
         MAIN_TABS.add(Tab.NAVIGATION);

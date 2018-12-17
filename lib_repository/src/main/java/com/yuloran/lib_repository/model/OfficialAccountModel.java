@@ -73,9 +73,9 @@ public class OfficialAccountModel
                    .subscribe(new CommonRequestSubscriber<List<OfficialAccount>>()
                    {
                        @Override
-                       protected void onSuccess(@NonNull List<OfficialAccount> response)
+                       protected void onSuccess(@NonNull List<OfficialAccount> accounts)
                        {
-                           Logger.info(TAG, "getOfficialAccounts$onSuccess, %d accounts.", response.size());
+                           Logger.info(TAG, "getOfficialAccounts$onSuccess, %d accounts.", accounts.size());
                        }
 
                        @Override

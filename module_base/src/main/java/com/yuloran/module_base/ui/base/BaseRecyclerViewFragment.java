@@ -15,15 +15,15 @@
  */
 package com.yuloran.module_base.ui.base;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -34,30 +34,16 @@ import androidx.recyclerview.widget.RecyclerView;
  *
  * @since 1.0.0
  */
-public class BaseRecyclerViewFragment extends BaseFragment
+public abstract class BaseRecyclerViewFragment extends BaseFragment
 {
-    private static final String TAG = "BaseRecyclerViewFragment";
-
     protected RecyclerView mRecyclerView;
 
-    private String mTitle;
-
-    @Override
-    protected String logTag()
-    {
-        return TAG;
-    }
+    protected abstract void onRecyclerViewCreated();
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        Bundle arguments = getArguments();
-        if (arguments != null)
-        {
-            mTitle = arguments.getString("title");
-        }
     }
 
     @Nullable
@@ -65,22 +51,14 @@ public class BaseRecyclerViewFragment extends BaseFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
             savedInstanceState)
     {
-        //        mRecyclerView = new RecyclerView(inflater.getContext());
-        //        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        //                ViewGroup.LayoutParams.MATCH_PARENT);
-        //        mRecyclerView.setLayoutParams(layoutParams);
-        //        mRecyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
-        //        return mRecyclerView;
-
         super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(android.R.layout.simple_list_item_1, container, false);
-        TextView textView = root.findViewById(android.R.id.text1);
-        ViewGroup.LayoutParams layoutParams = textView.getLayoutParams();
-        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        textView.setLayoutParams(layoutParams);
-        textView.setGravity(Gravity.CENTER);
-        textView.setText(mTitle);
-        return root;
+        Context context = inflater.getContext();
+        mRecyclerView = new RecyclerView(context);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        mRecyclerView.setLayoutParams(layoutParams);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        onRecyclerViewCreated();
+        return mRecyclerView;
     }
 }

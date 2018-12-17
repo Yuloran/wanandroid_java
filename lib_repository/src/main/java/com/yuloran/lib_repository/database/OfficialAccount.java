@@ -15,6 +15,11 @@
  */
 package com.yuloran.lib_repository.database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.yuloran.lib_core.utils.StringUtil;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -29,7 +34,7 @@ import androidx.room.PrimaryKey;
  * @since 1.0.0
  */
 @Entity(tableName = "official_account")
-public class OfficialAccount
+public class OfficialAccount implements Parcelable
 {
     @PrimaryKey
     @ColumnInfo(name = "account_id")
@@ -68,9 +73,40 @@ public class OfficialAccount
     @Override
     public String toString()
     {
-        return "OfficialAccount{" +
-                "accountId='" + accountId + '\'' +
-                ", author='" + author + '\'' +
-                '}';
+        return "OfficialAccount{" + "accountId='" + accountId + '\'' + ", author='" + author + '\'' + '}';
     }
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeInt(this.accountId);
+        dest.writeString(this.author);
+    }
+
+    protected OfficialAccount(Parcel in)
+    {
+        this.accountId = in.readInt();
+        this.author = StringUtil.emptyIfNull(in.readString());
+    }
+
+    public static final Parcelable.Creator<OfficialAccount> CREATOR = new Parcelable.Creator<OfficialAccount>()
+    {
+        @Override
+        public OfficialAccount createFromParcel(Parcel source)
+        {
+            return new OfficialAccount(source);
+        }
+
+        @Override
+        public OfficialAccount[] newArray(int size)
+        {
+            return new OfficialAccount[size];
+        }
+    };
 }

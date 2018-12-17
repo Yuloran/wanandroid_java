@@ -16,9 +16,6 @@
 package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
@@ -28,8 +25,6 @@ import com.yuloran.wanandroid_java.viewmodel.OfficialAccountVM;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -94,18 +89,14 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
         });
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState)
+    public void onViewCreated()
     {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
         // FragmentPagerAdapter：Fragment超出缓存范围后，View会被销毁，但是Fragment只是调用onStop。
         // 再次跳至该Fragment时，需要重新绑定adapter。
         if (mPagerAdapter != null)
         {
             mViewPager.setAdapter(mPagerAdapter);
         }
-        return view;
     }
 }

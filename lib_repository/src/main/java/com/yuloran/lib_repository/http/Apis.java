@@ -18,6 +18,7 @@ package com.yuloran.lib_repository.http;
 import com.yuloran.lib_core.bean.backend.response.PageResp;
 import com.yuloran.lib_core.bean.backend.response.SectionResp;
 
+import androidx.annotation.IntRange;
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -62,7 +63,7 @@ public interface Apis
          * @return {@link PageResp}
          */
         @GET("wxarticle/list/{id}/{page}/json")
-        Flowable<PageResp> getOfficialAccountArticles(@Path("id") String id, @Path("page") String page);
+        Flowable<PageResp> getOfficialAccountArticles(@Path("id") int id, @Path("page") @IntRange(from = 1) int page);
 
         /**
          * 在某个公众号中搜索历史文章

@@ -19,7 +19,6 @@ import android.os.Bundle;
 
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.module_base.ui.adapter.BaseFragmentStatePagerAdapter;
-import com.yuloran.module_base.ui.base.BaseRecyclerViewFragment;
 import com.yuloran.module_base.util.ResUtil;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class OfficialAccountPagerAdapter extends BaseFragmentStatePagerAdapter<O
     public Fragment getItem(int position)
     {
         Bundle bundle = new Bundle();
-        bundle.putString("title", String.valueOf(getPageTitle(position)));
-        return ResUtil.instantiateFragment(BaseRecyclerViewFragment.class.getName(), bundle);
+        bundle.putParcelable("official_account", mData.get(position));
+        return ResUtil.instantiateFragment(AccountArticlesFragment.class.getName(), bundle);
     }
 }
