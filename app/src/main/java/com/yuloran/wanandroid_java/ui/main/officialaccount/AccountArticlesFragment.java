@@ -17,11 +17,15 @@ package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import android.os.Bundle;
 
+import com.yuloran.lib_core.bean.ArticlesBean;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.module_base.ui.adapter.recyclerview.MultiTypeAdapterEx;
+import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreDelegate;
+import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreItem;
+import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreItemViewBinder;
 import com.yuloran.module_base.ui.base.BaseRecyclerViewFragment;
 import com.yuloran.wanandroid_java.viewmodel.AccountArticleVM;
 
@@ -38,7 +42,7 @@ import androidx.lifecycle.ViewModelProviders;
  *
  * @since 1.0.0
  */
-public class AccountArticlesFragment extends BaseRecyclerViewFragment
+public class AccountArticlesFragment extends BaseRecyclerViewFragment implements LoadMoreDelegate.OnLoadMoreListener
 {
     private static final String TAG = "AccountArticlesFragment";
 
@@ -68,34 +72,32 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment
         }
 
         mVM = ViewModelProviders.of(this).get(AccountArticleVM.class);
-        mVM.getArticles().observe(this, new Observer<List<Item>>()
+        mVM.getArticles().observe(this, new Observer<ArticlesBean>()
         {
             @Override
-            public void onChanged(List<Item> items)
+            public void onChanged(ArticlesBean articlesBean)
             {
-                Logger.info(TAG, "onChanged: " + items);
-
-                items = ArrayUtil.nonNull(items);
-
-                // 仅fetch一次，否则当服务器数据为空时，会进入死循环
-                if (items.isEmpty() && fetchCount == 0)
+                if (articlesBean == null)
                 {
-                    fetchCount++;
-                    mVM.fetch(mOfficialAccount, AccountArticlesFragment.this);
-                }
-
-                if (mMultiTypeAdapter == null)
-                {
-                    Logger.info(TAG, "onChanged: init multiTypeAdapter.");
-                    mMultiTypeAdapter = new MultiTypeAdapterEx();
-                    mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder());
-                    mMultiTypeAdapter.setDataSource(items);
-                    mRecyclerView.setAdapter(mMultiTypeAdapter);
+                    Logger.info(TAG, "onChanged: init adapter and fetch data.");
+                    initAdapter();
+                    initData();
                     return;
                 }
 
-                Logger.info(TAG, "onChanged: update data source.");
-                mMultiTypeAdapter.addAll(items);
+                // 加载结束
+                mMultiTypeAdapter.setLoadState(articlesBean.isOver() ? LoadMoreDelegate.LOAD_OVER : LoadMoreDelegate
+                        .LOAD_COMPLETE);
+
+                List<Item> articles = articlesBean.getArticles();
+                if (ArrayUtil.isEmpty(articles))
+                {
+                    Logger.info(TAG, "onChanged: no items.");
+                    return;
+                }
+
+                Logger.info(TAG, "onChanged: all %d items.", articles.size());
+                mMultiTypeAdapter.addAll(articles);
             }
         });
     }
@@ -105,7 +107,40 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment
     {
         if (mMultiTypeAdapter != null)
         {
+            mMultiTypeAdapter.setOnLoadMoreListener(this);
             mRecyclerView.setAdapter(mMultiTypeAdapter);
         }
+    }
+
+    private void initAdapter()
+    {
+        if (mMultiTypeAdapter != null)
+        {
+            return;
+        }
+
+        mMultiTypeAdapter = new MultiTypeAdapterEx();
+        mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder());
+        mMultiTypeAdapter.register(LoadMoreItem.class, new LoadMoreItemViewBinder());
+        mMultiTypeAdapter.setOnLoadMoreListener(this);
+        mRecyclerView.setAdapter(mMultiTypeAdapter);
+    }
+
+    private void initData()
+    {
+        // 仅fetch一次，否则当服务器数据为空时，会进入死循环
+        if (fetchCount != 0)
+        {
+            return;
+        }
+
+        fetchCount++;
+        mVM.fetch(mOfficialAccount, AccountArticlesFragment.this);
+    }
+
+    @Override
+    public void onLoadMore()
+    {
+        mVM.fetch(mOfficialAccount, AccountArticlesFragment.this);
     }
 }

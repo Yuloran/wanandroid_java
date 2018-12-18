@@ -17,7 +17,7 @@ package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.module_base.ui.adapter.recyclerview.BindingViewHolder;
-import com.yuloran.module_base.ui.adapter.recyclerview.ItemViewBindingBinder;
+import com.yuloran.module_base.ui.adapter.recyclerview.BindingItemViewBinder;
 import com.yuloran.wanandroid_java.R;
 import com.yuloran.wanandroid_java.databinding.ItemAccountArticleBinding;
 
@@ -31,7 +31,7 @@ import androidx.annotation.NonNull;
  *
  * @since 1.0.0
  */
-public class ArticleItemViewBinder extends ItemViewBindingBinder<Item, ItemAccountArticleBinding>
+public class ArticleItemViewBinder extends BindingItemViewBinder<Item, ItemAccountArticleBinding>
 {
     @Override
     protected int getItemLayoutId()

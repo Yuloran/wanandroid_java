@@ -15,19 +15,25 @@
  */
 package com.yuloran.lib_repository.model;
 
+import android.text.Html;
+
 import com.trello.rxlifecycle3.LifecycleProvider;
+import com.yuloran.lib_core.bean.ArticlesBean;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.bean.backend.response.Page;
 import com.yuloran.lib_core.bean.backend.response.PageResp;
 import com.yuloran.lib_core.template.threadsafe.SafeMutableLiveData;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
+import com.yuloran.lib_core.utils.StringUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.http.ApiProvider;
+import com.yuloran.lib_repository.http.ErrCode;
+import com.yuloran.lib_repository.http.common.CommonRequestException;
 import com.yuloran.lib_repository.http.common.CommonRequestSubscriber;
 import com.yuloran.lib_repository.http.common.ResponsePredicate;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,17 +57,19 @@ public class AccountArticleModel
 {
     private static final String TAG = "AccountArticleModel";
 
-    private SafeMutableLiveData<List<Item>> mArticles = new SafeMutableLiveData<>();
+    private SafeMutableLiveData<ArticlesBean> mArticles = new SafeMutableLiveData<>();
+
+    private volatile Page mPage;
 
     public AccountArticleModel()
     {
         // 使添加第一个observer时，也能收到回调
-        mArticles.setValue(Collections.<Item>emptyList());
+        mArticles.setValue(null);
     }
 
     @NonNull
     @MainThread
-    public SafeMutableLiveData<List<Item>> getArticles()
+    public SafeMutableLiveData<ArticlesBean> getArticles()
     {
         return mArticles;
     }
@@ -70,43 +78,82 @@ public class AccountArticleModel
     {
         Objects.requireNonNull(account, "account is null!");
 
+        final int nextPage = mPage == null ? 1 : mPage.getCurPage() + 1;
+        boolean isOver = mPage != null && nextPage > mPage.getPageCount();
+        if (isOver)
+        {
+            Logger.info(TAG, "fetch: no more items.");
+            mArticles.setValue(new ArticlesBean(true));
+            return;
+        }
+
         ApiProvider.getInstance()
                    .getWanAndroidApi()
-                   .getOfficialAccountArticles(account.getAccountId(), 1)
+                   .getOfficialAccountArticles(account.getAccountId(), nextPage)
                    .filter(new ResponsePredicate<>())
-                   .map(new Function<PageResp, List<Item>>()
+                   .map(new Function<PageResp, ArticlesBean>()
                    {
                        @Override
-                       public List<Item> apply(PageResp pageResp) throws Exception
+                       public ArticlesBean apply(PageResp pageResp) throws Exception
                        {
-                           Page page = pageResp.getPage();
-                           List<Item> items = page.getItems();
-                           return ArrayUtil.nonNull(items);
+                           mPage = pageResp.getPage();
+                           if (mPage == null)
+                           {
+                               throw new CommonRequestException(ErrCode.NULL_RESPONSE, "page response is null!");
+                           }
+                           return new ArticlesBean(mPage.getCurPage() > mPage.getPageCount(), mPage.getItems());
                        }
                    })
-                   .doOnNext(new Consumer<List<Item>>()
+                   .map(new Function<ArticlesBean, ArticlesBean>()
                    {
                        @Override
-                       public void accept(List<Item> items) throws Exception
+                       public ArticlesBean apply(ArticlesBean articlesBean) throws Exception
                        {
-                           mArticles.setValue(items);
+                           List<Item> articles = articlesBean.getArticles();
+                           if (!ArrayUtil.isEmpty(articles))
+                           {
+                               List<Item> filtered = new ArrayList<>(articles);
+                               for (Item item : articles)
+                               {
+                                   // 过滤非法数据
+                                   if (StringUtil.isEmpty(item.getTitle()) || StringUtil.isEmpty(item.getLink()))
+                                   {
+                                       continue;
+                                   }
+                                   // wanAndroidApi返回的title常带有html符号，需要转换一下
+                                   item.setTitle(Html.fromHtml(item.getTitle()).toString());
+                                   filtered.add(item);
+                               }
+                               articlesBean.setArticles(filtered);
+                           }
+                           return articlesBean;
                        }
                    })
-                   .compose(lifecycleProvider.<List<Item>>bindToLifecycle())
+                   .doOnNext(new Consumer<ArticlesBean>()
+                   {
+                       @Override
+                       public void accept(ArticlesBean articlesBean) throws Exception
+                       {
+                           mArticles.setValue(articlesBean);
+                       }
+                   })
+                   .compose(lifecycleProvider.<ArticlesBean>bindToLifecycle())
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
-                   .subscribe(new CommonRequestSubscriber<List<Item>>()
+                   .subscribe(new CommonRequestSubscriber<ArticlesBean>()
                    {
                        @Override
-                       protected void onSuccess(@NonNull List<Item> articles)
+                       protected void onSuccess(@NonNull ArticlesBean articles)
                        {
-                           Logger.info(TAG, "getOfficialArticles$onSuccess, %d articles.", articles.size());
+                           Logger.info(TAG, "getOfficialArticles$onSuccess, %d articles.", ArrayUtil.sizeof(articles
+                                   .getArticles()));
                        }
 
                        @Override
                        protected void onError(int errCode, @Nullable String errMsg)
                        {
                            Logger.error(TAG, "getOfficialArticles$onError: errCode:%d, errMsg:%s.", errCode, errMsg);
+                           mArticles.setValue(new ArticlesBean(false));
                        }
                    });
     }

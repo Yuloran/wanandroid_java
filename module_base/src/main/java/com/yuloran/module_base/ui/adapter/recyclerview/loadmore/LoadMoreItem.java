@@ -13,26 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.wanandroid_java.ui.datadinding;
-
-import android.widget.TextView;
-
-import androidx.databinding.BindingAdapter;
+package com.yuloran.module_base.ui.adapter.recyclerview.loadmore;
 
 /**
- * [wanAndroidApi返回的title常带有html符号，需要转换]
+ * [LoadMoreItem]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/17 23:29
+ * Date Added: 2018/12/18 23:11
  *
  * @since 1.0.0
  */
-public final class TextViewHtmlBindingAdapter
+public final class LoadMoreItem
 {
-    @BindingAdapter("app:text")
-    public static void setText(TextView textView, String title)
-    {
-        // html符号转换已转移至model中，以避免在UI线程中解析html
-        textView.setText(title);
-    }
 }

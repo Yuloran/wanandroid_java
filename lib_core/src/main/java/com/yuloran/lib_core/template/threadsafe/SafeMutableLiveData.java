@@ -39,14 +39,14 @@ public final class SafeMutableLiveData<T> extends LiveData<T>
      * Sets the value. If there are active observers, the value will be dispatched to them.
      * <p>
      * This method can be called from any thread. And the new value will be dispatched only when it not equals the
-     * last value, equals is determined by {@link Objects#equals(Object, Object)}.
+     * last value.
      *
      * @param value The new value
      */
     @Override
     public void setValue(T value)
     {
-        if (Objects.equals(value, getValue()))
+        if (value != null && value.equals(getValue()))
         {
             Logger.debug(TAG, "setValue: values equals, skip.");
             return;

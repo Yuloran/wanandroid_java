@@ -16,11 +16,13 @@
 package com.yuloran.module_base.ui.adapter.recyclerview;
 
 import com.yuloran.lib_core.utils.ArrayUtil;
+import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import me.drakeet.multitype.Items;
 import me.drakeet.multitype.MultiTypeAdapter;
 
@@ -38,10 +40,37 @@ public class MultiTypeAdapterEx extends MultiTypeAdapter
 
     private List<Object> mItems = new ArrayList<>();
 
+    private LoadMoreDelegate mLoadMoreDelegate;
+
+    private LoadMoreDelegate.OnLoadMoreListener mOnLoadMoreListener;
+
     public MultiTypeAdapterEx()
     {
         super();
         setItems(mItems);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView)
+    {
+        mLoadMoreDelegate = new LoadMoreDelegate(recyclerView, this);
+        if (mOnLoadMoreListener != null)
+        {
+            mLoadMoreDelegate.setOnLoadMoreListener(mOnLoadMoreListener);
+        }
+    }
+
+    public void setOnLoadMoreListener(@NonNull LoadMoreDelegate.OnLoadMoreListener onLoadMoreListener)
+    {
+        mOnLoadMoreListener = onLoadMoreListener;
+    }
+
+    public void setLoadState(@LoadMoreDelegate.LoadSate int loadState)
+    {
+        if (mLoadMoreDelegate != null)
+        {
+            mLoadMoreDelegate.setLoadState(loadState);
+        }
     }
 
     @NonNull
@@ -53,12 +82,14 @@ public class MultiTypeAdapterEx extends MultiTypeAdapter
 
     public <T> void setDataSource(List<T> items)
     {
-        if (!ArrayUtil.isEmpty(items))
+        if (ArrayUtil.isEmpty(items))
         {
             mItems.clear();
-            getItems().addAll(items);
-            notifyDataSetChanged();
+        } else
+        {
+            mItems.addAll(items);
         }
+        notifyDataSetChanged();
     }
 
     public void add(Object item)

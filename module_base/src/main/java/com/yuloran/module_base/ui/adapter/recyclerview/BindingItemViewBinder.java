@@ -32,7 +32,7 @@ import me.drakeet.multitype.ItemViewBinder;
  *
  * @since 1.0.0
  */
-public abstract class ItemViewBindingBinder<T, E extends ViewDataBinding>
+public abstract class BindingItemViewBinder<T, E extends ViewDataBinding>
         extends ItemViewBinder<T, BindingViewHolder<E>>
 {
     @LayoutRes

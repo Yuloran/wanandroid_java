@@ -16,14 +16,11 @@
 package com.yuloran.wanandroid_java.viewmodel;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
-import com.yuloran.lib_core.bean.backend.response.Item;
-import com.yuloran.lib_core.template.threadsafe.SafeMutableLiveData;
+import com.yuloran.lib_core.bean.ArticlesBean;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.ThreadUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.model.AccountArticleModel;
-
-import java.util.List;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -44,8 +41,6 @@ public class AccountArticleVM extends ViewModel
 
     private AccountArticleModel mModel;
 
-    private SafeMutableLiveData<List<Item>> mArticles;
-
     public AccountArticleVM()
     {
         mModel = new AccountArticleModel();
@@ -53,14 +48,10 @@ public class AccountArticleVM extends ViewModel
 
     @NonNull
     @MainThread
-    public LiveData<List<Item>> getArticles()
+    public LiveData<ArticlesBean> getArticles()
     {
         ThreadUtil.assertMainThread("getArticles");
-        if (mArticles == null)
-        {
-            mArticles = mModel.getArticles();
-        }
-        return mArticles;
+        return mModel.getArticles();
     }
 
     public <T> void fetch(@NonNull OfficialAccount account, LifecycleProvider<T> lifecycleProvider)

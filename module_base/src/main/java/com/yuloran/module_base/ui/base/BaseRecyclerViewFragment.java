@@ -15,11 +15,12 @@
  */
 package com.yuloran.module_base.ui.base;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.yuloran.module_base.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,12 +53,9 @@ public abstract class BaseRecyclerViewFragment extends BaseFragment
             savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        Context context = inflater.getContext();
-        mRecyclerView = new RecyclerView(context);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        mRecyclerView.setLayoutParams(layoutParams);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        View root = inflater.inflate(R.layout.layout_recyclerview, container, false);
+        mRecyclerView = root.findViewById(R.id.my_recyclerview);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
         onRecyclerViewCreated();
         return mRecyclerView;
     }
