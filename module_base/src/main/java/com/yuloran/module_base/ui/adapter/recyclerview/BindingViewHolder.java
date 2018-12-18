@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class BindingViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder
 {
     @NonNull
-    protected final T mBinding;
+    private final T mBinding;
 
     BindingViewHolder(@NonNull T binding)
     {
