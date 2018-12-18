@@ -3,4 +3,4 @@ An android client for wanandroid open API.
 
 # Preview
 
-![](wiki/official_account.png)
+![](wiki/official_account.webp)
