@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.wanandroid_java.ui.main.knowledgestructure;
+package com.yuloran.wanandroid_java.ui.main.category;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -29,16 +29,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
- * [知识体系的Fragment]
+ * [分类的Fragment]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/14 18:53
  *
  * @since 1.0.0
  */
-public class KnowledgeStructureFragment extends BaseFragment
+public class CategoryFragment extends BaseFragment
 {
-    private static final String TAG = "KnowledgeStructureFragment";
+    private static final String TAG = "CategoryFragment";
 
     @Override
     protected String logTag()
@@ -65,7 +65,7 @@ public class KnowledgeStructureFragment extends BaseFragment
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         textView.setLayoutParams(layoutParams);
         textView.setGravity(Gravity.CENTER);
-        textView.setText(TabConfig.Tab.KNOWLEDGE_STRUCTURE.getTitle());
+        textView.setText(TabConfig.Tab.CATEGORY.getTitle());
         return root;
     }
 }

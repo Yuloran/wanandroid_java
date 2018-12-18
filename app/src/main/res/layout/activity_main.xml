@@ -22,7 +22,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/my_tab_layout"
             android:layout_width="0dp"
-            android:layout_height="@dimen/tab_height"
+            android:layout_height="@dimen/bottom_tab_height"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,8 +31,6 @@
             app:tabGravity="fill"
             app:tabIndicatorHeight="0dp"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@color/tab_indicator"
             tools:background="@color/toolbar_background" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

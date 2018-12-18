@@ -15,7 +15,8 @@
         android:layout_alignWithParentIfMissing="true"
         android:layout_centerVertical="true"
         android:padding="@dimen/button_inner_padding"
-        android:src="@drawable/ic_menu_white" />
+        android:src="@drawable/ic_menu"
+        android:tint="@android:color/white" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/my_action_bar_title"
@@ -39,8 +40,9 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/my_action_bar_option2"
         android:padding="@dimen/button_inner_padding"
+        android:tint="@android:color/white"
         android:visibility="gone"
-        tools:src="@drawable/ic_ok_white"
+        tools:src="@drawable/ic_ok"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -50,7 +52,8 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:padding="@dimen/button_inner_padding"
+        android:tint="@android:color/white"
         android:visibility="gone"
-        tools:src="@drawable/ic_search_white"
+        tools:src="@drawable/ic_search"
         tools:visibility="visible" />
 </com.yuloran.module_base.ui.widget.ActionBar>

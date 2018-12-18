@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.wanandroid_java.ui.main.navigation;
+package com.yuloran.wanandroid_java.ui.main.links;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -29,16 +29,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
- * [导航页的Fragment]
+ * [链接页的Fragment]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/14 18:53
  *
  * @since 1.0.0
  */
-public class NavigationFragment extends BaseFragment
+public class LinksFragment extends BaseFragment
 {
-    private static final String TAG = "NavigationFragment";
+    private static final String TAG = "LinksFragment";
 
     @Override
     protected String logTag()
@@ -65,7 +65,7 @@ public class NavigationFragment extends BaseFragment
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         textView.setLayoutParams(layoutParams);
         textView.setGravity(Gravity.CENTER);
-        textView.setText(TabConfig.Tab.NAVIGATION.getTitle());
+        textView.setText(TabConfig.Tab.LINKS.getTitle());
         return root;
     }
 }

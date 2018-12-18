@@ -7,9 +7,15 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="item"
             type="com.yuloran.lib_core.bean.backend.response.Item" />
+
+        <variable
+            name="visible"
+            type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,13 +31,13 @@
             android:layout_marginBottom="4dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{item.title}"
             android:textColor="@android:color/black"
             android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@id/publish_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:text="@{item.title}"
             tools:text="SampleSampleSampleSampleSampleSampleSampleSampleSample" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -58,6 +64,7 @@
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/page_padding_start"
             android:background="@color/line_divider"
+            android:visibility="@{visible ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

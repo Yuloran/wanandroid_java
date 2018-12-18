@@ -16,6 +16,7 @@
 package com.yuloran.wanandroid_java.ui;
 
 import com.yuloran.module_base.util.ResUtil;
+import com.yuloran.wanandroid_java.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,9 @@ public final class TabConfig
     {
         MAIN_TABS.add(Tab.OFFICIAL_ACCOUNT);
         MAIN_TABS.add(Tab.RECOMMEND);
-        MAIN_TABS.add(Tab.KNOWLEDGE_STRUCTURE);
+        MAIN_TABS.add(Tab.CATEGORY);
         MAIN_TABS.add(Tab.PROJECT);
-        MAIN_TABS.add(Tab.NAVIGATION);
+        MAIN_TABS.add(Tab.LINKS);
     }
 
     private TabConfig()
@@ -54,9 +55,9 @@ public final class TabConfig
      * <ol>
      * <li>{@link Tab#RECOMMEND}
      * <li>{@link Tab#OFFICIAL_ACCOUNT}
-     * <li>{@link Tab#KNOWLEDGE_STRUCTURE}
+     * <li>{@link Tab#CATEGORY}
      * <li>{@link Tab#PROJECT}
-     * <li>{@link Tab#NAVIGATION}
+     * <li>{@link Tab#LINKS}
      * </ol>
      *
      * @return 主页所有tabs
@@ -68,29 +69,38 @@ public final class TabConfig
 
     public enum Tab
     {
-        /** 微信公众号 */
-        RECOMMEND(com.yuloran.module_base.R.string.tab_recommend),
         /** 推荐 */
-        OFFICIAL_ACCOUNT(com.yuloran.module_base.R.string.tab_official_account),
-        /** 知识体系 */
-        KNOWLEDGE_STRUCTURE(com.yuloran.module_base.R.string.tab_knowledge_structure),
+        RECOMMEND(R.string.tab_recommend, R.drawable.ic_recommend),
+        /** 微信公众号 */
+        OFFICIAL_ACCOUNT(R.string.tab_official_account, R.drawable.ic_weixin),
+        /** 分类 */
+        CATEGORY(R.string.tab_category, R.drawable.ic_category),
         /** 项目 */
-        PROJECT(com.yuloran.module_base.R.string.tab_project),
-        /** 导航 */
-        NAVIGATION(com.yuloran.module_base.R.string.tab_navigation);
+        PROJECT(R.string.tab_project, R.drawable.ic_project),
+        /** 链接 */
+        LINKS(R.string.tab_links, R.drawable.ic_link);
 
-        /** 页面标题的字符串id */
+        /** tab title resource id */
         private int mTitleResId;
 
-        Tab(int titleResId)
+        /** tab icon resource id */
+        private int mIconResId;
+
+        Tab(int titleResId, int iconResId)
         {
             mTitleResId = titleResId;
+            mIconResId = iconResId;
         }
 
         @NonNull
         public String getTitle()
         {
             return ResUtil.getString(mTitleResId);
+        }
+
+        public int getIconResId()
+        {
+            return mIconResId;
         }
     }
 }

@@ -51,7 +51,7 @@ public abstract class BaseTabLayoutViewPagerFragment extends BaseFragment
             savedInstanceState)
     {
         super.onCreateView(inflater, container, savedInstanceState);
-        mRootView = inflater.inflate(R.layout.simple_tablayout_with_viewpager, container, false);
+        mRootView = inflater.inflate(R.layout.layout_tablayout_with_viewpager, container, false);
         mTabLayout = mRootView.findViewById(R.id.my_tab_layout);
         mViewPager = mRootView.findViewById(R.id.my_view_pager);
         mTabLayout.setupWithViewPager(mViewPager);

@@ -14,13 +14,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabBackground="@color/toolbar_background"
-        app:tabIndicator="@drawable/round_corner_tabindicator"
+        app:tabIndicator="@drawable/shap_round_corner_tabindicator"
         app:tabIndicatorColor="@android:color/white"
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="2dp"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@color/tab_indicator"
+        app:tabTextColor="@color/tab_not_selected"
         tools:background="@color/toolbar_background" />
 
     <androidx.viewpager.widget.ViewPager

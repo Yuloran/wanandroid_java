@@ -16,8 +16,8 @@
 package com.yuloran.wanandroid_java.ui;
 
 import com.yuloran.module_base.util.ResUtil;
-import com.yuloran.wanandroid_java.ui.main.knowledgestructure.KnowledgeStructureFragment;
-import com.yuloran.wanandroid_java.ui.main.navigation.NavigationFragment;
+import com.yuloran.wanandroid_java.ui.main.category.CategoryFragment;
+import com.yuloran.wanandroid_java.ui.main.links.LinksFragment;
 import com.yuloran.wanandroid_java.ui.main.officialaccount.OfficialAccountFragment;
 import com.yuloran.wanandroid_java.ui.main.project.ProjectFragment;
 import com.yuloran.wanandroid_java.ui.main.recommend.RecommendFragment;
@@ -48,12 +48,12 @@ final class MainTabPageFactory
                 return ResUtil.instantiateFragment(RecommendFragment.class.getName(), null);
             case OFFICIAL_ACCOUNT:
                 return ResUtil.instantiateFragment(OfficialAccountFragment.class.getName(), null);
-            case KNOWLEDGE_STRUCTURE:
-                return ResUtil.instantiateFragment(KnowledgeStructureFragment.class.getName(), null);
+            case CATEGORY:
+                return ResUtil.instantiateFragment(CategoryFragment.class.getName(), null);
             case PROJECT:
                 return ResUtil.instantiateFragment(ProjectFragment.class.getName(), null);
-            case NAVIGATION:
-                return ResUtil.instantiateFragment(NavigationFragment.class.getName(), null);
+            case LINKS:
+                return ResUtil.instantiateFragment(LinksFragment.class.getName(), null);
             default:
         }
         return null;

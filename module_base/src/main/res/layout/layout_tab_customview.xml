@@ -1,0 +1,28 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/bottom_tab_height"
+    android:layout_height="@dimen/bottom_tab_height"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:background="@color/toolbar_background">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/tab_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="2dp"
+        app:srcCompat="@drawable/ic_recommend"
+        app:tint="@color/selector_tab" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tab_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:textColor="@color/selector_tab"
+        android:textSize="12sp"
+        tools:text="desc" />
+
+</LinearLayout>

@@ -43,6 +43,7 @@ public class ArticleItemViewBinder extends ItemViewBindingBinder<Item, ItemAccou
     protected void onBindViewHolder(@NonNull BindingViewHolder<ItemAccountArticleBinding> holder, @NonNull Item item)
     {
         holder.getBinding().setItem(item);
+        holder.getBinding().setVisible(getPosition(holder) < getAdapter().getItemCount() - 1);
         holder.getBinding().executePendingBindings();
     }
 }

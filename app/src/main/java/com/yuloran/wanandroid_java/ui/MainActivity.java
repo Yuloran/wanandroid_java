@@ -16,6 +16,8 @@
 package com.yuloran.wanandroid_java.ui;
 
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.yuloran.module_base.ui.base.BaseActivity;
@@ -56,14 +58,19 @@ public class MainActivity extends BaseActivity
         mBottomTab = mRootView.findViewById(R.id.my_tab_layout);
 
         mViewPager.setAdapter(new MainTabPagerAdapter(getSupportFragmentManager()));
-        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
-        {
-            @Override
-            public void onPageSelected(int position)
-            {
-                // TODO animate swipe refresh automatically
-            }
-        });
         mBottomTab.setupWithViewPager(mViewPager);
+        for (int i = 0; i < mBottomTab.getTabCount(); i++)
+        {
+            TabLayout.Tab tab = mBottomTab.getTabAt(i);
+            if (tab != null)
+            {
+                View customView = getLayoutInflater().inflate(R.layout.layout_tab_customview, mBottomTab, false);
+                ImageView customImageView = customView.findViewById(R.id.tab_icon);
+                customImageView.setImageResource(TabConfig.getMainTabs().get(i).getIconResId());
+                TextView customTextView = customView.findViewById(R.id.tab_title);
+                customTextView.setText(TabConfig.getMainTabs().get(i).getTitle());
+                tab.setCustomView(customView);
+            }
+        }
     }
 }

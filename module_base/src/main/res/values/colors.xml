@@ -8,5 +8,5 @@
     <color name="window_background">#F5F5F5</color>
     <color name="line_divider">#EAEAEA</color>
     <color name="yellow">#FFCE3A</color>
-    <color name="tab_indicator">#A0FFFFFF</color>
+    <color name="tab_not_selected">#A0FFFFFF</color>
 </resources>
