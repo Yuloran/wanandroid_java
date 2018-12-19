@@ -80,12 +80,16 @@ public class MultiTypeAdapterEx extends MultiTypeAdapter
         return mItems;
     }
 
+    /**
+     * reset the items, clear first, then add all.
+     *
+     * @param items the new items
+     * @param <T>   the generic type of the element
+     */
     public <T> void setDataSource(List<T> items)
     {
-        if (ArrayUtil.isEmpty(items))
-        {
-            mItems.clear();
-        } else
+        mItems.clear();
+        if (!ArrayUtil.isEmpty(items))
         {
             mItems.addAll(items);
         }
@@ -99,6 +103,9 @@ public class MultiTypeAdapterEx extends MultiTypeAdapter
             int positionStart = getItemCount();
             mItems.add(item);
             notifyItemInserted(positionStart);
+
+            // 因为最后1个item的底部分割线不可见，所以此处还需局部刷新原来的最后一个item
+            notifyItemChanged(positionStart - 1, new Object());
         }
     }
 

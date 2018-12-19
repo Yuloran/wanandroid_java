@@ -85,21 +85,22 @@ public class ApiProvider
         int size = 100 * 1024 * 1024;
         Cache cache = new Cache(EnvService.getInstance().getCacheDir(), size);
 
-        // 日志拦截器
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
         // 请求头拦截器
         RequestHeadersInterceptor headersInterceptor = new RequestHeadersInterceptor();
+
+        // 日志拦截器
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         // 缓存控制拦截器
         CacheControlInterceptor cacheControlInterceptor = new CacheControlInterceptor();
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.cache(cache)
-               .addInterceptor(loggingInterceptor)
                .addInterceptor(headersInterceptor)
+               .addInterceptor(loggingInterceptor) // 日志拦截器在其他普通拦截器之后设置，否则无法打印所有请求头
                .addNetworkInterceptor(cacheControlInterceptor)
+               .retryOnConnectionFailure(true)
                .connectTimeout(10, TimeUnit.SECONDS)
                .readTimeout(15, TimeUnit.SECONDS)
                .writeTimeout(15, TimeUnit.SECONDS);

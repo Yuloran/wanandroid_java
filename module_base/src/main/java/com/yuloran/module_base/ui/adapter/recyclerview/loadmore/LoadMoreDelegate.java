@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * [上滑加载实现类]
+ * [上滑加载更多实现类]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/18 16:28
@@ -44,9 +44,13 @@ public final class LoadMoreDelegate
 
     private static final String TAG = "LoadMoreDelegate";
 
+    /** 初始状态 */
     private static final int IDLE = -1;
+    /** 加载中 */
     private static final int LOADING = 1;
+    /** 加载完成 */
     public static final int LOAD_COMPLETE = 2;
+    /** 加载结束（没有更多数据了） */
     public static final int LOAD_OVER = 3;
 
     @NonNull
@@ -54,6 +58,19 @@ public final class LoadMoreDelegate
 
     private OnLoadMoreListener mOnLoadMoreListener;
 
+    private LoadMoreItem mLoadMoreItem;
+
+    private Runnable mLoadMoreRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            mAdapter.add(mLoadMoreItem);
+            mOnLoadMoreListener.onLoadMore();
+        }
+    };
+
+    /** 当前加载状态 */
     private volatile int mLoadState = IDLE;
 
     public LoadMoreDelegate(@NonNull RecyclerView recyclerView, @NonNull MultiTypeAdapterEx adapter)
@@ -62,6 +79,7 @@ public final class LoadMoreDelegate
         Objects.requireNonNull(adapter, "adapter is null!");
 
         mAdapter = adapter;
+        mLoadMoreItem = new LoadMoreItem();
         recyclerView.addOnScrollListener(new OnRecyclerViewScrollListener());
     }
 
@@ -77,6 +95,7 @@ public final class LoadMoreDelegate
         Logger.debug(TAG, "setLoadState.");
         if (mLoadState == LOADING)
         {
+            // 移除加载更多视图对应的item
             mAdapter.remove(mAdapter.getItemCount() - 1);
             mLoadState = loadState;
         }
@@ -107,14 +126,14 @@ public final class LoadMoreDelegate
             if (layoutManager instanceof LinearLayoutManager)
             {
                 LinearLayoutManager l = (LinearLayoutManager) layoutManager;
+                // use findLastVisibleItemPosition to ensure that the load more footer can be seen
                 int lastVisibleItemPosition = l.findLastVisibleItemPosition();
                 if (lastVisibleItemPosition == layoutManager.getItemCount() - 1)
                 {
                     Logger.info(TAG, "onLoadMore.");
                     mLoadState = LOADING;
-                    LoadMoreItem item = new LoadMoreItem();
-                    mAdapter.add(item);
-                    mOnLoadMoreListener.onLoadMore();
+                    // Fix Cannot call this method while RecyclerView is computing a layout or scrolling.
+                    recyclerView.post(mLoadMoreRunnable);
                 }
             }
         }

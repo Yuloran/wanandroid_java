@@ -15,19 +15,31 @@
  */
 package com.yuloran.lib_repository.http.interceptor;
 
-import com.yuloran.lib_core.init.NetworkService;
 import com.yuloran.lib_core.utils.Logger;
+import com.yuloran.lib_core.utils.StringUtil;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.CacheControl;
 import okhttp3.Interceptor;
-import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * [缓存控制拦截器]
+ * [缓存控制拦截器]<br />
+ * <strong>注：</strong>
+ * <ol>
+ * <li>网上博客错误用法太多，全是复制粘贴坑人的！
+ * <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control">Http Cache-Control 详解</a>
+ * <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching_FAQ">Http 缓存详解</a>
+ * <li>本例为正确用法
+ * </ol>
+ * <p>
+ * <strong>public vs private</strong>
+ * <ul>
+ * <li>public: Indicates that the response may be cached by any cache, even if the response would normally be
+ * non-cacheable (e.g. if the response does not contain a max-age directive or the Expires header).
+ * <li>private: Indicates that the response is intended for a single user and must not be stored by a shared cache. A
+ * private cache may store the response.
+ * </ul>
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/16 21:05
@@ -41,26 +53,14 @@ public class CacheControlInterceptor implements Interceptor
     @Override
     public Response intercept(Chain chain) throws IOException
     {
-        // step1. 修改请求头：无网络时，强制使用缓存
-        Request request = chain.request();
-        if (!NetworkService.getInstance().getNetworkInfo().isConnected())
+        Logger.debug(TAG, "CacheControlInterceptor.");
+        Response response = chain.proceed(chain.request());
+        String cacheControl = response.header("Cache-Control");
+        if (StringUtil.isEmpty(cacheControl))
         {
-            Logger.debug(TAG, "Request$intercept: network unavailable, force cache.");
-            request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
+            Logger.debug(TAG, "'Cache-Control' not set by the backend, add it ourselves.");
+            return response.newBuilder().removeHeader("Pragma").header("Cache-Control", "public, max-age=60").build();
         }
-
-        // step2. 修改响应头：有网时，不使用缓存。无网络时，缓存有效期为7天。
-        Response.Builder respBuilder = chain.proceed(request).newBuilder();
-        if (NetworkService.getInstance().getNetworkInfo().isConnected())
-        {
-            Logger.debug(TAG, "Response$intercept: network available, disable cache.");
-            respBuilder.header("Cache-Control", "public, max-age=0").removeHeader("Pragma");
-        } else
-        {
-            Logger.debug(TAG, "Response$intercept: network unavailable, stale cache until 7days.");
-            respBuilder.header("Cache-Control", "public, only-if-cached, max-stale=" + TimeUnit.DAYS.toSeconds(7))
-                       .removeHeader("Pragma");
-        }
-        return respBuilder.build();
+        return response;
     }
 }

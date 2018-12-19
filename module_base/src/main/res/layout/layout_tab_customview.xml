@@ -14,14 +14,14 @@
         android:layout_height="20dp"
         android:layout_marginBottom="2dp"
         app:srcCompat="@drawable/ic_recommend"
-        app:tint="@color/selector_tab" />
+        app:tint="@color/color_tab_text" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tab_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
-        android:textColor="@color/selector_tab"
+        android:textColor="@color/color_tab_text"
         android:textSize="12sp"
         tools:text="desc" />
 </LinearLayout>

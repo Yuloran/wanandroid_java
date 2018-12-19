@@ -18,10 +18,13 @@ package com.yuloran.lib_repository.http.interceptor;
 import android.webkit.WebSettings;
 
 import com.yuloran.lib_core.init.EnvService;
+import com.yuloran.lib_core.init.NetworkService;
+import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.StringUtil;
 
 import java.io.IOException;
 
+import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -41,14 +44,18 @@ public class RequestHeadersInterceptor implements Interceptor
     @Override
     public Response intercept(Chain chain) throws IOException
     {
+        Logger.debug(TAG, "RequestHeadersInterceptor.");
         Request request = chain.request();
         Request.Builder builder = request.newBuilder();
-        builder.addHeader("Content-Type", "application/json;charset=UTF-8")
-               .addHeader("Accept-Charset", "UTF-8")
-               .addHeader("Accept-Language", "zh-rCN")
-               .addHeader("Authorization", "test")
-               .removeHeader("User-Agent")
-               .addHeader("User-Agent", getUserAgent());
+        builder.header("Content-Type", "application/json;charset=UTF-8")
+               .header("Accept-Charset", "UTF-8")
+               .header("User-Agent", getUserAgent());
+        if (!NetworkService.getInstance().getNetworkInfo().isConnected())
+        {
+            // 无网络时，强制使用缓存
+            Logger.debug(TAG, "network unavailable, force cache.");
+            builder.cacheControl(CacheControl.FORCE_CACHE);
+        }
         return chain.proceed(builder.build());
     }
 
