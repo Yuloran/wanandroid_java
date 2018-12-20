@@ -28,7 +28,7 @@ import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.StringUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.http.ApiProvider;
-import com.yuloran.lib_repository.http.ErrCode;
+import com.yuloran.lib_core.constant.ErrCode;
 import com.yuloran.lib_repository.http.common.CommonRequestException;
 import com.yuloran.lib_repository.http.common.CommonRequestSubscriber;
 import com.yuloran.lib_repository.http.common.ResponsePredicate;
@@ -53,15 +53,15 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @since 1.0.0
  */
-public class AccountArticleModel
+public class ArticlesModel
 {
-    private static final String TAG = "AccountArticleModel";
+    private static final String TAG = "ArticlesModel";
 
     private SafeMutableLiveData<ArticlesBean> mArticles = new SafeMutableLiveData<>();
 
     private volatile Page mPage;
 
-    public AccountArticleModel()
+    public ArticlesModel()
     {
         // 使添加第一个observer时，也能收到回调
         mArticles.setValue(null);
@@ -94,7 +94,7 @@ public class AccountArticleModel
                    .map(new Function<PageResp, ArticlesBean>()
                    {
                        @Override
-                       public ArticlesBean apply(PageResp pageResp) throws Exception
+                       public ArticlesBean apply(PageResp pageResp)
                        {
                            mPage = pageResp.getPage();
                            if (mPage == null)
@@ -107,7 +107,7 @@ public class AccountArticleModel
                    .map(new Function<ArticlesBean, ArticlesBean>()
                    {
                        @Override
-                       public ArticlesBean apply(ArticlesBean articlesBean) throws Exception
+                       public ArticlesBean apply(ArticlesBean articlesBean)
                        {
                            List<Item> articles = articlesBean.getArticles();
                            if (!ArrayUtil.isEmpty(articles))
@@ -132,7 +132,7 @@ public class AccountArticleModel
                    .doOnNext(new Consumer<ArticlesBean>()
                    {
                        @Override
-                       public void accept(ArticlesBean articlesBean) throws Exception
+                       public void accept(ArticlesBean articlesBean)
                        {
                            mArticles.setValue(articlesBean);
                        }

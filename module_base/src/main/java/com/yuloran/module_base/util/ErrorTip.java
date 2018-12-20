@@ -17,7 +17,7 @@ package com.yuloran.module_base.util;
 
 import android.util.SparseIntArray;
 
-import com.yuloran.lib_repository.http.ErrCode;
+import com.yuloran.lib_core.constant.ErrCode;
 import com.yuloran.module_base.R;
 
 import io.reactivex.annotations.NonNull;

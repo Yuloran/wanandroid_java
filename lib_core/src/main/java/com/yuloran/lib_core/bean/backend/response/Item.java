@@ -19,7 +19,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.yuloran.lib_core.INoProguard;
 import com.yuloran.lib_core.annotations.Useful;
-import com.yuloran.lib_core.constant.ISection;
+import com.yuloran.lib_core.constant.Cons;
 
 import java.util.List;
 
@@ -34,85 +34,85 @@ import java.util.List;
 public class Item implements INoProguard
 {
     /** 内容id */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("id")
     private int id;
 
     /** 所属栏目id */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("chapterId")
     private int chapterId;
 
     /** 所属栏目名称 */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("chapterName")
     private String chapterName;
 
     /** 所属栏目的所属栏目id */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("superChapterId")
     private int superChapterId;
 
     /** 所属栏目的所属栏目名称 */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("superChapterName")
     private String superChapterName;
 
     /** 内容作者名字 */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("author")
     private String author;
 
     /** 内容标题 */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("title")
     private String title;
 
     /** 内容站内地址 */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("link")
     private String link;
 
     /** 格式化后的发布日期，如 '2天前' */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("niceDate")
     private String niceDate;
 
     /** 发布时间(unix timestamp, ms) */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("publishTime")
     private long publishTime;
 
     /** 内容是否收藏(需要登录) */
-    @Useful({ISection.OFFICIAL_ACCOUNT, ISection.PROJECT})
+    @Useful({Cons.OFFICIAL_ACCOUNT, Cons.PROJECT})
     @Expose
     @SerializedName("collect")
     private boolean collect;
 
     /** 项目描述 */
-    @Useful(ISection.PROJECT)
+    @Useful(Cons.PROJECT)
     @Expose
     @SerializedName("desc")
     private String desc;
 
     /** 项目封面 */
-    @Useful(ISection.PROJECT)
+    @Useful(Cons.PROJECT)
     @Expose
     @SerializedName("envelopePic")
     private String envelopePic;
 
     /** 项目github地址 */
-    @Useful(ISection.PROJECT)
+    @Useful(Cons.PROJECT)
     @Expose
     @SerializedName("projectLink")
     private String projectLink;

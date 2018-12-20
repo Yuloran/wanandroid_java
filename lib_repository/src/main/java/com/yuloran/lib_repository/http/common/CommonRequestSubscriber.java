@@ -16,7 +16,7 @@
 package com.yuloran.lib_repository.http.common;
 
 import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.lib_repository.http.ErrCode;
+import com.yuloran.lib_core.constant.ErrCode;
 
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;

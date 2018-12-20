@@ -89,7 +89,7 @@ public class OfficialAccountModel
     private static class SectionResp2Accounts implements Function<SectionResp, List<OfficialAccount>>
     {
         @Override
-        public List<OfficialAccount> apply(SectionResp sectionResp) throws Exception
+        public List<OfficialAccount> apply(SectionResp sectionResp)
         {
             List<Section> sections = sectionResp.getSections();
             Logger.info(TAG, "getOfficialAccounts$map: " + sections);
@@ -114,7 +114,7 @@ public class OfficialAccountModel
     private static class CacheAccounts implements Consumer<List<OfficialAccount>>
     {
         @Override
-        public void accept(List<OfficialAccount> officialAccounts) throws Exception
+        public void accept(List<OfficialAccount> officialAccounts)
         {
             Logger.info(TAG, "getOfficialAccounts$doOnNext: " + officialAccounts);
             // 使用liveData的问题：此处为增量更新，即有删除、更新、新增。这些操作是一个整体，

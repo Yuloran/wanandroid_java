@@ -23,8 +23,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api project(':lib_core')
 
+    // room database
     implementation "androidx.room:room-runtime:$rootProject.ext.room_version"
     annotationProcessor "androidx.room:room-compiler:$rootProject.ext.room_version" // use kapt for Kotlin
+
+    // module
+    implementation project(':lib_core')
 }

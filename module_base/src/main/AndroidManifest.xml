@@ -1,2 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yuloran.module_base"/>
+    package="com.yuloran.module_base">
+
+    <application>
+        <activity
+            android:name=".ui.HtmlActivity"
+            android:configChanges="orientation" />
+    </application>
+</manifest>

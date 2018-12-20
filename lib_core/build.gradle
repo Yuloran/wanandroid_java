@@ -41,4 +41,6 @@ dependencies {
     }
     // logging_interceptor
     api "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.logging_interceptor_version"
+    // route framework
+    api "com.alibaba:arouter-api:$rootProject.ext.arouter_api_version"
 }

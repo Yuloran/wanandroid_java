@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.base.BaseActivity">
 
     <include
         android:id="@+id/action_bar"
-        layout="@layout/action_bar"
-        app:layout_constraintBottom_toTopOf="@+id/my_content_root"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/action_bar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/my_content_root"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:background="@color/yellow" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

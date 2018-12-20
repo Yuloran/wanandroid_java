@@ -13,34 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.module_base.ui.adapter.recyclerview;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.ViewDataBinding;
-import androidx.recyclerview.widget.RecyclerView;
+package com.yuloran.lib_core.constant;
 
 /**
- * [ViewHolder for DataBinding]
+ * [项目常量定义]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/17 16:18
+ * Date Added: 2018/12/1 12:56
  *
  * @since 1.0.0
  */
-public class BindingViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder
+public interface Cons
 {
-    @NonNull
-    private final T mBinding;
+    /** 微信公众号 */
+    byte OFFICIAL_ACCOUNT = 0;
 
-    BindingViewHolder(@NonNull T binding)
-    {
-        super(binding.getRoot());
-        mBinding = binding;
-    }
+    /** 项目 */
+    byte PROJECT = 1;
 
-    @NonNull
-    public T getBinding()
-    {
-        return mBinding;
-    }
+    String KEY_TITLE = "KEY_TITLE";
+    String KEY_URL = "KEY_URL";
+    String KEY_BUNDLE = "KEY_BUNDLE";
 }

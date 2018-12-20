@@ -13,36 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.lib_repository.http.common;
+package com.yuloran.module_base.ui.adapter.recyclerview.databinding;
 
-import com.yuloran.lib_core.bean.backend.response.BaseResp;
-import com.yuloran.lib_core.constant.ErrCode;
-
-import io.reactivex.functions.Predicate;
+import androidx.annotation.NonNull;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * [响应异常检测]
+ * [ViewHolder for DataBinding]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/16 13:11
+ * Date Added: 2018/12/17 16:18
  *
  * @since 1.0.0
  */
-public class ResponsePredicate<T extends BaseResp> implements Predicate<T>
+public class BindingViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder
 {
-    @Override
-    public boolean test(T t)
+    @NonNull
+    private final T mBinding;
+
+    BindingViewHolder(@NonNull T binding)
     {
-        if (t == null)
-        {
-            throw new CommonRequestException(ErrCode.NULL_RESPONSE, "Backend Response is null!");
-        }
+        super(binding.getRoot());
+        mBinding = binding;
+    }
 
-        if (!t.isSuccessful())
-        {
-            throw new CommonRequestException(t.getErrorCode(), "Backend Response Code is not 0!");
-        }
-
-        return true;
+    @NonNull
+    public T getBinding()
+    {
+        return mBinding;
     }
 }

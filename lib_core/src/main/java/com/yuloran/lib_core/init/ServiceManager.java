@@ -54,6 +54,7 @@ public final class ServiceManager implements IInit
         mServices.add(EnvService.getInstance());
         mServices.add(ActivityMgrService.getInstance());
         mServices.add(NetworkService.getInstance());
+        mServices.add(RouterService.getInstance());
     }
 
     private ServiceManager()

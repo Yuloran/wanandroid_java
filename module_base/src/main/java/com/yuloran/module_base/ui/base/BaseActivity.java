@@ -33,13 +33,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
  *
  * @since 1.0.0
  */
-public class BaseActivity extends RxFragmentActivity
+public abstract class BaseActivity extends RxFragmentActivity
 {
     private static final String TAG = "BaseActivity";
 
-    private ActionBar mActionBar;
+    protected abstract void onActionBarCreated(@NonNull ActionBar actionBar);
 
-    private ConstraintLayout mContentRoot;
+    protected abstract void onCreateContentLayout(@NonNull ConstraintLayout contentRoot);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,8 +48,8 @@ public class BaseActivity extends RxFragmentActivity
 
         setContentView(R.layout.base_activity);
 
-        mActionBar = findViewById(R.id.action_bar);
-        mActionBar.getBack().setOnClickListener(new View.OnClickListener()
+        ActionBar actionBar = findViewById(R.id.action_bar);
+        actionBar.getBack().setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -57,18 +57,10 @@ public class BaseActivity extends RxFragmentActivity
                 onBackPressed();
             }
         });
-        onActionBarCreated(mActionBar);
+        onActionBarCreated(actionBar);
 
-        mContentRoot = findViewById(R.id.my_content_root);
-        onCreateContentLayout(mContentRoot);
-    }
-
-    protected void onActionBarCreated(@NonNull ActionBar actionBar)
-    {
-    }
-
-    protected void onCreateContentLayout(@NonNull ConstraintLayout contentRoot)
-    {
+        ConstraintLayout contentRoot = findViewById(R.id.my_content_root);
+        onCreateContentLayout(contentRoot);
     }
 
 }

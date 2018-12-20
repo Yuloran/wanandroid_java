@@ -13,25 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.lib_repository.http;
+package com.yuloran.lib_core.router;
 
 /**
- * [错误码定义]
+ * [module_base 路由接口定义]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/14 22:20
+ * Date Added: 2018/12/20 17:28
  *
  * @since 1.0.0
  */
-public interface ErrCode
+public interface BaseModule
 {
-    int UNKNOWN_ERROR = -100000;
-
-    int NULL_RESPONSE = 100000;
-
-    int SOCKET_TIME_OUT = 100001;
-
-    int IO_ERROR = 100002;
-
-    int UNKNOWN_HOST = 100003;
+    interface Activity
+    {
+        String HTML_ACTIVITY = "/base/HtmlActivity";
+    }
 }

@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.module_base.ui.adapter.recyclerview;
+package com.yuloran.module_base.ui.adapter.recyclerview.databinding;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener;
+
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import me.drakeet.multitype.ItemViewBinder;
@@ -35,6 +38,22 @@ import me.drakeet.multitype.ItemViewBinder;
 public abstract class BindingItemViewBinder<T, E extends ViewDataBinding>
         extends ItemViewBinder<T, BindingViewHolder<E>>
 {
+    protected OnItemClickListener<T> mOnItemClickListener;
+
+    public BindingItemViewBinder()
+    {
+    }
+
+    public BindingItemViewBinder(@Nullable OnItemClickListener<T> onItemClickListener)
+    {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemClickListener(@Nullable OnItemClickListener<T> onItemClickListener)
+    {
+        mOnItemClickListener = onItemClickListener;
+    }
+
     @LayoutRes
     protected abstract int getItemLayoutId();
 

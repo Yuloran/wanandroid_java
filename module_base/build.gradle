@@ -8,6 +8,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
     }
 
     buildTypes {
@@ -24,10 +30,18 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
+
+    // ui widgets
     api "androidx.appcompat:appcompat:$rootProject.ext.appcompat_version"
     api "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintlayout_version"
-    api "com.google.android.material:material:1.1.0-alpha01"
+    api "com.google.android.material:material:$rootProject.ext.material_version"
     api "me.drakeet.multitype:multitype:$rootProject.ext.multitype_version"
     api "androidx.lifecycle:lifecycle-extensions:$rootProject.ext.lifecycle_version"
-    api project(':lib_repository')
+    implementation "com.just.agentweb:agentweb:$rootProject.ext.agentweb_version"
+
+    // router
+    annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouter_compiler_version"
+
+    // module
+    implementation project(':lib_core')
 }

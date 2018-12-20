@@ -19,15 +19,19 @@ import android.os.Bundle;
 
 import com.yuloran.lib_core.bean.ArticlesBean;
 import com.yuloran.lib_core.bean.backend.response.Item;
+import com.yuloran.lib_core.constant.Cons;
+import com.yuloran.lib_core.init.RouterService;
+import com.yuloran.lib_core.router.BaseModule;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.module_base.ui.adapter.recyclerview.MultiTypeAdapterEx;
+import com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreDelegate;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreItem;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreItemViewBinder;
 import com.yuloran.module_base.ui.base.BaseRecyclerViewFragment;
-import com.yuloran.wanandroid_java.viewmodel.AccountArticleVM;
+import com.yuloran.wanandroid_java.viewmodel.ArticlesVM;
 
 import java.util.List;
 
@@ -42,9 +46,10 @@ import androidx.lifecycle.ViewModelProviders;
  *
  * @since 1.0.0
  */
-public class AccountArticlesFragment extends BaseRecyclerViewFragment implements LoadMoreDelegate.OnLoadMoreListener
+public class ArticlesFragment extends BaseRecyclerViewFragment
+        implements LoadMoreDelegate.OnLoadMoreListener, OnItemClickListener<Item>
 {
-    private static final String TAG = "AccountArticlesFragment";
+    private static final String TAG = "ArticlesFragment";
 
     @Override
     protected String logTag()
@@ -54,7 +59,7 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment implements
 
     private OfficialAccount mOfficialAccount;
 
-    private AccountArticleVM mVM;
+    private ArticlesVM mVM;
 
     private MultiTypeAdapterEx mMultiTypeAdapter;
 
@@ -71,7 +76,7 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment implements
             mOfficialAccount = bundle.getParcelable("official_account");
         }
 
-        mVM = ViewModelProviders.of(this).get(AccountArticleVM.class);
+        mVM = ViewModelProviders.of(this).get(ArticlesVM.class);
         mVM.getArticles().observe(this, new Observer<ArticlesBean>()
         {
             @Override
@@ -100,6 +105,20 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment implements
                 mMultiTypeAdapter.addAll(articles);
             }
         });
+        mVM.getNavigation().observe(this, new Observer<Item>()
+        {
+            @Override
+            public void onChanged(Item item)
+            {
+                if (item != null)
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Cons.KEY_TITLE, item.getTitle());
+                    bundle.putString(Cons.KEY_URL, item.getLink());
+                    RouterService.getInstance().navigate(BaseModule.Activity.HTML_ACTIVITY, bundle);
+                }
+            }
+        });
     }
 
     @Override
@@ -120,7 +139,7 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment implements
         }
 
         mMultiTypeAdapter = new MultiTypeAdapterEx();
-        mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder());
+        mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder(this));
         mMultiTypeAdapter.register(LoadMoreItem.class, new LoadMoreItemViewBinder());
         mMultiTypeAdapter.setOnLoadMoreListener(this);
         mRecyclerView.setAdapter(mMultiTypeAdapter);
@@ -135,12 +154,18 @@ public class AccountArticlesFragment extends BaseRecyclerViewFragment implements
         }
 
         fetchCount++;
-        mVM.fetch(mOfficialAccount, AccountArticlesFragment.this);
+        mVM.fetch(mOfficialAccount, ArticlesFragment.this);
     }
 
     @Override
     public void onLoadMore()
     {
-        mVM.fetch(mOfficialAccount, AccountArticlesFragment.this);
+        mVM.fetch(mOfficialAccount, ArticlesFragment.this);
+    }
+
+    @Override
+    public void onItemClick(Item item)
+    {
+        mVM.navigate(item);
     }
 }

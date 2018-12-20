@@ -16,12 +16,14 @@
 package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import com.yuloran.lib_core.bean.backend.response.Item;
-import com.yuloran.module_base.ui.adapter.recyclerview.BindingViewHolder;
-import com.yuloran.module_base.ui.adapter.recyclerview.BindingItemViewBinder;
+import com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener;
+import com.yuloran.module_base.ui.adapter.recyclerview.databinding.BindingItemViewBinder;
+import com.yuloran.module_base.ui.adapter.recyclerview.databinding.BindingViewHolder;
 import com.yuloran.wanandroid_java.R;
 import com.yuloran.wanandroid_java.databinding.ItemAccountArticleBinding;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * [文章列表item渲染器]
@@ -33,6 +35,11 @@ import androidx.annotation.NonNull;
  */
 public class ArticleItemViewBinder extends BindingItemViewBinder<Item, ItemAccountArticleBinding>
 {
+    ArticleItemViewBinder(@Nullable OnItemClickListener<Item> onItemClickListener)
+    {
+        super(onItemClickListener);
+    }
+
     @Override
     protected int getItemLayoutId()
     {
@@ -40,10 +47,13 @@ public class ArticleItemViewBinder extends BindingItemViewBinder<Item, ItemAccou
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull BindingViewHolder<ItemAccountArticleBinding> holder, @NonNull Item item)
+    protected void onBindViewHolder(@NonNull BindingViewHolder<ItemAccountArticleBinding> holder, @NonNull final Item
+            item)
     {
         holder.getBinding().setItem(item);
         holder.getBinding().setVisible(getPosition(holder) < getAdapter().getItemCount() - 1);
+        holder.getBinding().setPresenter(mOnItemClickListener);
         holder.getBinding().executePendingBindings();
+
     }
 }

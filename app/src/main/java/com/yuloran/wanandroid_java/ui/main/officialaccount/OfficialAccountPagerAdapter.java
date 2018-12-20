@@ -55,6 +55,6 @@ public class OfficialAccountPagerAdapter extends BaseFragmentStatePagerAdapter<O
     {
         Bundle bundle = new Bundle();
         bundle.putParcelable("official_account", mData.get(position));
-        return ResUtil.instantiateFragment(AccountArticlesFragment.class.getName(), bundle);
+        return ResUtil.instantiateFragment(ArticlesFragment.class.getName(), bundle);
     }
 }

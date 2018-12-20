@@ -9,5 +9,5 @@
     <string name="err_null_response">暂时无法获取数据，请稍候重试</string>
     <string name="err_time_out">网络连接失败，请检查您的网络</string>
     <string name="err_io_exception">暂时无法获取数据，请稍候重试</string>
-    <string name="err_unknown_host">服务器暂时无法连接，请稍候重试</string>
+    <string name="err_unknown_host">网络连接失败，请检查您的网络</string>
 </resources>

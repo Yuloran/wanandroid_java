@@ -9,6 +9,12 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
     }
 
     buildTypes {
@@ -29,5 +35,12 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // router
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+
+    // module
     implementation project(':module_base')
+    implementation project(':lib_repository')
+    implementation project(':lib_core')
 }

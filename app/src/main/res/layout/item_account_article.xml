@@ -7,9 +7,17 @@
 
         <import type="android.view.View" />
 
+        <import type="com.yuloran.lib_core.bean.backend.response.Item" />
+
         <variable
             name="item"
-            type="com.yuloran.lib_core.bean.backend.response.Item" />
+            type="Item" />
+
+        <!-- '<'在xml中有特殊含义，需要转义 -->
+
+        <variable
+            name="presenter"
+            type="com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener&lt;Item>" />
 
         <variable
             name="visible"
@@ -22,11 +30,13 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/inner_item_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/effect_ripple"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{() -> presenter.onItemClick(item)}"
             android:orientation="vertical">
 
             <TextView

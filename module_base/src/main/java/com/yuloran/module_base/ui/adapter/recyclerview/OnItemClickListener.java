@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.lib_core.constant;
+package com.yuloran.module_base.ui.adapter.recyclerview;
 
 /**
- * [项目常量定义]
+ * [OnItemClickListener]
  * <p>
  * Author: Yuloran
- * Date Added: 2018/12/1 12:56
+ * Date Added: 2018/12/20 16:08
  *
  * @since 1.0.0
  */
-public interface ISection
+public interface OnItemClickListener<T>
 {
-    /** 微信公众号 */
-    byte OFFICIAL_ACCOUNT = 0;
-
-    /** 项目 */
-    byte PROJECT = 1;
+    void onItemClick(T item);
 }

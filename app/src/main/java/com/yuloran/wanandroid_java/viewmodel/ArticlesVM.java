@@ -17,10 +17,12 @@ package com.yuloran.wanandroid_java.viewmodel;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
 import com.yuloran.lib_core.bean.ArticlesBean;
+import com.yuloran.lib_core.bean.backend.response.Item;
+import com.yuloran.lib_core.template.SingleLiveEvent;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.ThreadUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
-import com.yuloran.lib_repository.model.AccountArticleModel;
+import com.yuloran.lib_repository.model.ArticlesModel;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -35,15 +37,17 @@ import androidx.lifecycle.ViewModel;
  *
  * @since 1.0.0
  */
-public class AccountArticleVM extends ViewModel
+public class ArticlesVM extends ViewModel
 {
-    private static final String TAG = "AccountArticleVM";
+    private static final String TAG = "ArticlesVM";
 
-    private AccountArticleModel mModel;
+    private ArticlesModel mModel;
 
-    public AccountArticleVM()
+    private SingleLiveEvent<Item> mNavigation = new SingleLiveEvent<>();
+
+    public ArticlesVM()
     {
-        mModel = new AccountArticleModel();
+        mModel = new ArticlesModel();
     }
 
     @NonNull
@@ -54,9 +58,22 @@ public class AccountArticleVM extends ViewModel
         return mModel.getArticles();
     }
 
+    @NonNull
+    @MainThread
+    public LiveData<Item> getNavigation()
+    {
+        return mNavigation;
+    }
+
     public <T> void fetch(@NonNull OfficialAccount account, LifecycleProvider<T> lifecycleProvider)
     {
         Logger.info(TAG, "fetch: cache expired, fetch from server.");
         mModel.fetch(account, lifecycleProvider);
+    }
+
+    @MainThread
+    public void navigate(@NonNull Item item)
+    {
+        mNavigation.setValue(item);
     }
 }

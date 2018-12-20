@@ -30,7 +30,7 @@ import okhttp3.Response;
  * <li>网上博客错误用法太多，全是复制粘贴坑人的！
  * <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control">Http Cache-Control 详解</a>
  * <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching_FAQ">Http 缓存详解</a>
- * <li>本例为正确用法
+ * <li>本例为正确用法，详见 <a href="https://www.jianshu.com/p/d3e67d57f287">你真的了解 OkHttp 缓存控制吗？</a>
  * </ol>
  * <p>
  * <strong>public vs private</strong>
@@ -59,6 +59,7 @@ public class CacheControlInterceptor implements Interceptor
         if (StringUtil.isEmpty(cacheControl))
         {
             Logger.debug(TAG, "'Cache-Control' not set by the backend, add it ourselves.");
+            // assume response is fresh within 1min, this is optional
             return response.newBuilder().removeHeader("Pragma").header("Cache-Control", "public, max-age=60").build();
         }
         return response;
