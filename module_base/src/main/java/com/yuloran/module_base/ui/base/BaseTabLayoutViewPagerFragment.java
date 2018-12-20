@@ -15,7 +15,6 @@
  */
 package com.yuloran.module_base.ui.base;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.yuloran.module_base.R;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 /**
@@ -43,19 +41,15 @@ public abstract class BaseTabLayoutViewPagerFragment extends BaseFragment
     protected TabLayout mTabLayout;
     protected ViewPager mViewPager;
 
-    public abstract void onViewCreated();
+    public abstract void onTabLayoutViewPagerCreated();
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState)
+    protected void onRootInflated(@NonNull LayoutInflater inflater, @NonNull ViewGroup contentParent)
     {
-        super.onCreateView(inflater, container, savedInstanceState);
-        mRootView = inflater.inflate(R.layout.layout_tablayout_with_viewpager, container, false);
+        mRootView = inflater.inflate(R.layout.layout_tablayout_with_viewpager, contentParent, true);
         mTabLayout = mRootView.findViewById(R.id.my_tab_layout);
         mViewPager = mRootView.findViewById(R.id.my_view_pager);
         mTabLayout.setupWithViewPager(mViewPager);
-        onViewCreated();
-        return mRootView;
+        onTabLayoutViewPagerCreated();
     }
 }

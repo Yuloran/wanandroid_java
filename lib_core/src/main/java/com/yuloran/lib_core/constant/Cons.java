@@ -31,7 +31,32 @@ public interface Cons
     /** 项目 */
     byte PROJECT = 1;
 
+    //-----keys definition begin----------//
+
+    /** 获取title的key */
     String KEY_TITLE = "KEY_TITLE";
+
+    /** 获取url的key */
     String KEY_URL = "KEY_URL";
+
+    /** 获取bundle的key */
     String KEY_BUNDLE = "KEY_BUNDLE";
+
+    //----keys definition end------------//
+
+    //------view states definition begin----------//
+
+    /** 初始状态 */
+    int STATE_UNINITIALIZED = 0;
+
+    /** 加载中 */
+    int STATE_LOADING = 1;
+
+    /** 加载成功 */
+    int STATE_LOAD_SUCCESS = 2;
+
+    /** 加载失败 */
+    int STATE_LOAD_FAILURE = 3;
+
+    //---------view states definition end--------//
 }

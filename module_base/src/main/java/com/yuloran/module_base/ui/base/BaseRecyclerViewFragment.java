@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import com.yuloran.module_base.R;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,16 +46,12 @@ public abstract class BaseRecyclerViewFragment extends BaseFragment
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState)
+    protected void onRootInflated(@NonNull LayoutInflater inflater, @NonNull ViewGroup contentParent)
     {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(R.layout.layout_recyclerview, container, false);
+        View root = inflater.inflate(R.layout.layout_recyclerview, contentParent, true);
         mRecyclerView = root.findViewById(R.id.my_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
         onRecyclerViewCreated();
-        return mRecyclerView;
     }
 }

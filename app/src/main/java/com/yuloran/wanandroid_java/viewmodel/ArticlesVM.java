@@ -16,7 +16,7 @@
 package com.yuloran.wanandroid_java.viewmodel;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
-import com.yuloran.lib_core.bean.ArticlesBean;
+import com.yuloran.lib_repository.viewdata.ArticlesViewData;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.template.SingleLiveEvent;
 import com.yuloran.lib_core.utils.Logger;
@@ -52,7 +52,7 @@ public class ArticlesVM extends ViewModel
 
     @NonNull
     @MainThread
-    public LiveData<ArticlesBean> getArticles()
+    public LiveData<ArticlesViewData> getArticles()
     {
         ThreadUtil.assertMainThread("getArticles");
         return mModel.getArticles();

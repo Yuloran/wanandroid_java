@@ -17,7 +17,6 @@ package com.yuloran.lib_repository.database;
 
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -41,5 +40,8 @@ public interface OfficialAccountDao
     void bulkInsert(List<OfficialAccount> officialAccounts);
 
     @Query("select * from official_account")
-    LiveData<List<OfficialAccount>> query();
+    List<OfficialAccount> query();
+
+    @Query("delete from official_account")
+    void clear();
 }

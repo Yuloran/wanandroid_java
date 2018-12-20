@@ -19,7 +19,8 @@ import com.trello.rxlifecycle3.LifecycleProvider;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.ThreadUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
-import com.yuloran.lib_repository.model.OfficialAccountModel;
+import com.yuloran.lib_repository.model.OfficialAccountsModel;
+import com.yuloran.lib_repository.viewdata.BaseViewData;
 
 import java.util.List;
 
@@ -39,25 +40,18 @@ public class OfficialAccountVM extends ViewModel
 {
     private static final String TAG = "OfficialAccountVM";
 
-    private final OfficialAccountModel mModel;
-
-    private LiveData<List<OfficialAccount>> mAccounts;
+    private final OfficialAccountsModel mModel;
 
     public OfficialAccountVM()
     {
-        mModel = new OfficialAccountModel();
+        mModel = new OfficialAccountsModel();
     }
 
     @MainThread
-    public LiveData<List<OfficialAccount>> getAccounts()
+    public LiveData<BaseViewData<List<OfficialAccount>>> getAccounts()
     {
         ThreadUtil.assertMainThread("getAccounts");
-        if (mAccounts == null)
-        {
-            Logger.info(TAG, "getAccounts: init accounts liveData.");
-            mAccounts = mModel.getOfficialAccounts();
-        }
-        return mAccounts;
+        return mModel.getOfficialAccounts();
     }
 
     public <T> void fetch(LifecycleProvider<T> lifecycleProvider)

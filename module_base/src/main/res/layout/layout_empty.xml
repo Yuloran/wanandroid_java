@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yuloran.module_base.ui.widget.EmptyView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_err_view"
@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/loading_view"
+        style="@android:style/Widget.Material.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/error_icon"
@@ -22,4 +29,4 @@
         android:text="@string/err_unknown_host"
         android:textColor="@android:color/darker_gray"
         tools:text="Network abnormal, touch to reload." />
-</LinearLayout>
+</com.yuloran.module_base.ui.widget.EmptyView>

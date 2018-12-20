@@ -17,14 +17,16 @@ package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import android.os.Bundle;
 
-import com.yuloran.lib_core.bean.ArticlesBean;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.constant.Cons;
+import com.yuloran.lib_core.init.NetworkService;
 import com.yuloran.lib_core.init.RouterService;
 import com.yuloran.lib_core.router.BaseModule;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
+import com.yuloran.lib_repository.viewdata.ArticlesViewData;
+import com.yuloran.lib_repository.viewdata.ViewState;
 import com.yuloran.module_base.ui.adapter.recyclerview.MultiTypeAdapterEx;
 import com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreDelegate;
@@ -32,8 +34,6 @@ import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreItem;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreItemViewBinder;
 import com.yuloran.module_base.ui.base.BaseRecyclerViewFragment;
 import com.yuloran.wanandroid_java.viewmodel.ArticlesVM;
-
-import java.util.List;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -63,7 +63,7 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
 
     private MultiTypeAdapterEx mMultiTypeAdapter;
 
-    private int fetchCount;
+    private boolean mIsPage1Loaded;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -77,34 +77,37 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
         }
 
         mVM = ViewModelProviders.of(this).get(ArticlesVM.class);
-        mVM.getArticles().observe(this, new Observer<ArticlesBean>()
+        mVM.getArticles().observe(this, new Observer<ArticlesViewData>()
         {
             @Override
-            public void onChanged(ArticlesBean articlesBean)
+            public void onChanged(ArticlesViewData viewData)
             {
-                if (articlesBean == null)
+                if (viewData == null)
                 {
-                    Logger.info(TAG, "onChanged: init adapter and fetch data.");
-                    initAdapter();
-                    initData();
+                    Logger.warn(TAG, "onChanged: viewData is null!");
                     return;
                 }
 
-                // 加载结束
-                mMultiTypeAdapter.setLoadState(articlesBean.isOver() ? LoadMoreDelegate.LOAD_OVER : LoadMoreDelegate
-                        .LOAD_COMPLETE);
-
-                List<Item> articles = articlesBean.getArticles();
-                if (ArrayUtil.isEmpty(articles))
+                ViewState viewState = viewData.getViewState();
+                switch (viewState.getViewState())
                 {
-                    Logger.info(TAG, "onChanged: no items.");
-                    return;
+                    case Cons.STATE_UNINITIALIZED:
+                        initAdapter();
+                        break;
+                    case Cons.STATE_LOADING:
+                        onLoading(viewState);
+                        break;
+                    case Cons.STATE_LOAD_SUCCESS:
+                        onLoadSuccess(viewData);
+                        break;
+                    case Cons.STATE_LOAD_FAILURE:
+                        onLoadFailure(viewState);
+                        break;
+                    default:
                 }
-
-                Logger.info(TAG, "onChanged: all %d items.", articles.size());
-                mMultiTypeAdapter.addAll(articles);
             }
         });
+
         mVM.getNavigation().observe(this, new Observer<Item>()
         {
             @Override
@@ -116,6 +119,22 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
                     bundle.putString(Cons.KEY_TITLE, item.getTitle());
                     bundle.putString(Cons.KEY_URL, item.getLink());
                     RouterService.getInstance().navigate(BaseModule.Activity.HTML_ACTIVITY, bundle);
+                }
+            }
+        });
+
+        NetworkService.getInstance().getNetworkInfoLiveData().observe(this, new Observer<NetworkService.NetworkInfo>()
+        {
+            @Override
+            public void onChanged(NetworkService.NetworkInfo networkInfo)
+            {
+                if (networkInfo.isConnected())
+                {
+                    if (!mIsPage1Loaded)
+                    {
+                        Logger.info(TAG, "network resumed, reload.");
+                        mVM.fetch(mOfficialAccount, ArticlesFragment.this);
+                    }
                 }
             }
         });
@@ -133,28 +152,43 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
 
     private void initAdapter()
     {
-        if (mMultiTypeAdapter != null)
-        {
-            return;
-        }
-
+        Logger.info(TAG, "onChanged: init multiAdapter.");
         mMultiTypeAdapter = new MultiTypeAdapterEx();
         mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder(this));
         mMultiTypeAdapter.register(LoadMoreItem.class, new LoadMoreItemViewBinder());
         mMultiTypeAdapter.setOnLoadMoreListener(this);
         mRecyclerView.setAdapter(mMultiTypeAdapter);
+
+        mVM.fetch(mOfficialAccount, ArticlesFragment.this);
     }
 
-    private void initData()
+    private void onLoading(ViewState viewState)
     {
-        // 仅fetch一次，否则当服务器数据为空时，会进入死循环
-        if (fetchCount != 0)
+        Logger.info(TAG, "onChanged: onLoading(is page1 loaded? %b)...", mIsPage1Loaded);
+        if (!mIsPage1Loaded)
         {
-            return;
+            setViewState(viewState);
         }
+    }
 
-        fetchCount++;
-        mVM.fetch(mOfficialAccount, ArticlesFragment.this);
+    private void onLoadSuccess(ArticlesViewData viewData)
+    {
+        Logger.info(TAG, "obChanged: load success, %d articles.", ArrayUtil.sizeof(viewData.getViewData()));
+        mIsPage1Loaded = true;
+        setViewState(viewData.getViewState());
+        mMultiTypeAdapter.setLoadState(viewData.isOver() ? LoadMoreDelegate.LOAD_OVER : LoadMoreDelegate.LOAD_COMPLETE);
+        mMultiTypeAdapter.addAll(viewData.getViewData());
+    }
+
+    private void onLoadFailure(ViewState viewState)
+    {
+        Logger.info(TAG, "onChanged: load failure(is page1 loaded? %b, %d/%s).", mIsPage1Loaded, viewState.getErrCode
+                (), viewState
+                .getErrMsg());
+        if (!mIsPage1Loaded)
+        {
+            setViewState(viewState);
+        }
     }
 
     @Override

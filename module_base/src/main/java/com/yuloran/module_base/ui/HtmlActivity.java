@@ -83,7 +83,7 @@ public class HtmlActivity extends BaseActivity
                                 .setAgentWebParent(contentRoot, new ViewGroup.LayoutParams(ViewGroup.LayoutParams
                                         .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                                 .useDefaultIndicator()
-                                .setMainFrameErrorView(R.layout.layout_network_abnormal, R.id.error_icon)
+                                .setMainFrameErrorView(R.layout.layout_empty, R.id.error_icon)
                                 .createAgentWeb()
                                 .ready()
                                 .go(mUrl);

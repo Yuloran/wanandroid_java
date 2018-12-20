@@ -20,9 +20,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 
 import com.trello.rxlifecycle3.components.support.RxFragment;
+import com.yuloran.lib_core.constant.Cons;
 import com.yuloran.lib_core.utils.Logger;
+import com.yuloran.lib_repository.viewdata.ViewState;
+import com.yuloran.module_base.R;
+import com.yuloran.module_base.ui.widget.EmptyView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,19 +42,35 @@ import androidx.annotation.Nullable;
  */
 public abstract class BaseFragment extends RxFragment
 {
+    private static final boolean DEBUG = false;
+
+    private View mRoot;
+
+    private ViewGroup mContentParent;
+
+    private EmptyView mEmptyView;
+
     protected abstract String logTag();
+
+    protected abstract void onRootInflated(@NonNull LayoutInflater inflater, @NonNull ViewGroup contentParent);
 
     @Override
     public void onAttach(Context context)
     {
-        Logger.debug(logTag(), "onAttach.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onAttach.");
+        }
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Logger.debug(logTag(), "onCreate.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onCreate.");
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -58,63 +79,93 @@ public abstract class BaseFragment extends RxFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
             savedInstanceState)
     {
-        Logger.debug(logTag(), "onCreateView.");
-        return null;
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onCreateView.");
+        }
+        mRoot = inflater.inflate(R.layout.base_fragment, container, false);
+        mContentParent = mRoot.findViewById(R.id.fragment_content_root);
+        onRootInflated(inflater, mContentParent);
+        return mRoot;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
-        Logger.debug(logTag(), "onActivityCreated.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onActivityCreated.");
+        }
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public void onStart()
     {
-        Logger.debug(logTag(), "onStart.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onStart.");
+        }
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Logger.debug(logTag(), "onResume.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onResume.");
+        }
         super.onResume();
     }
 
     @Override
     public void onPause()
     {
-        Logger.debug(logTag(), "onPause.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onPause.");
+        }
         super.onPause();
     }
 
     @Override
     public void onStop()
     {
-        Logger.debug(logTag(), "onStop.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onStop.");
+        }
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Logger.debug(logTag(), "onDestroyView.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onDestroyView.");
+        }
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Logger.debug(logTag(), "onDestroy.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onDestroy.");
+        }
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Logger.debug(logTag(), "onDetach.");
+        if (DEBUG)
+        {
+            Logger.debug(logTag(), "onDetach.");
+        }
         super.onDetach();
     }
 
@@ -123,6 +174,31 @@ public abstract class BaseFragment extends RxFragment
     {
         Logger.debug(logTag(), "setUserVisibleHint: " + isVisibleToUser);
         super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    public void setViewState(ViewState viewState)
+    {
+        if (mEmptyView == null)
+        {
+            mEmptyView = (EmptyView) ((ViewStub) mRoot.findViewById(R.id.fragment_stub_import)).inflate();
+        }
+
+        switch (viewState.getViewState())
+        {
+            case Cons.STATE_LOADING:
+                mContentParent.setVisibility(View.GONE);
+                mEmptyView.setViewState(viewState);
+                break;
+            case Cons.STATE_LOAD_SUCCESS:
+                mEmptyView.setViewState(viewState);
+                mContentParent.setVisibility(View.VISIBLE);
+                break;
+            case Cons.STATE_LOAD_FAILURE:
+                mContentParent.setVisibility(View.INVISIBLE);
+                mEmptyView.setViewState(viewState);
+                break;
+            default:
+        }
     }
 
 }

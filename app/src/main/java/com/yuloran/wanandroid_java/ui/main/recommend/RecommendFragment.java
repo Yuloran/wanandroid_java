@@ -15,7 +15,6 @@
  */
 package com.yuloran.wanandroid_java.ui.main.recommend;
 
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.yuloran.module_base.ui.base.BaseFragment;
 import com.yuloran.wanandroid_java.ui.TabConfig;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * [推荐页的Fragment]
@@ -47,25 +45,15 @@ public class RecommendFragment extends BaseFragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    protected void onRootInflated(@NonNull LayoutInflater inflater, @NonNull ViewGroup contentParent)
     {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
-            savedInstanceState)
-    {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View root = inflater.inflate(android.R.layout.simple_list_item_1, container, false);
+        View root = inflater.inflate(android.R.layout.simple_list_item_1, contentParent, true);
         TextView textView = root.findViewById(android.R.id.text1);
         ViewGroup.LayoutParams layoutParams = textView.getLayoutParams();
         layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         textView.setLayoutParams(layoutParams);
         textView.setGravity(Gravity.CENTER);
-        textView.setText(TabConfig.Tab.RECOMMEND.getTitle());
-        return root;
+        textView.setText(TabConfig.Tab.CATEGORY.getTitle());
     }
 }

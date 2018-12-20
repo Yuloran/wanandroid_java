@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yuloran.lib_core.bean;
+package com.yuloran.lib_repository.viewdata;
 
 import com.yuloran.lib_core.bean.backend.response.Item;
 
@@ -27,40 +27,28 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public class ArticlesBean
+public class ArticlesViewData extends BaseViewData<List<Item>>
 {
     private boolean isOver;
 
-    private List<Item> articles;
-
-    public ArticlesBean(boolean isOver)
+    public ArticlesViewData(ViewState uninitialized)
     {
+        super(uninitialized);
+    }
+
+    public ArticlesViewData(boolean isOver, List<Item> articles)
+    {
+        super(articles);
         this.isOver = isOver;
     }
 
-    public ArticlesBean(boolean isOver, List<Item> articles)
+    public ArticlesViewData(int errCode, String errMsg)
     {
-        this.isOver = isOver;
-        this.articles = articles;
+        super(new ViewState(errCode, errMsg));
     }
 
     public boolean isOver()
     {
         return isOver;
-    }
-
-    public void setOver(boolean over)
-    {
-        isOver = over;
-    }
-
-    public List<Item> getArticles()
-    {
-        return articles;
-    }
-
-    public void setArticles(List<Item> articles)
-    {
-        this.articles = articles;
     }
 }

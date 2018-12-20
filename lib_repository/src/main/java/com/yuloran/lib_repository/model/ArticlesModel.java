@@ -18,20 +18,21 @@ package com.yuloran.lib_repository.model;
 import android.text.Html;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
-import com.yuloran.lib_core.bean.ArticlesBean;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.bean.backend.response.Page;
 import com.yuloran.lib_core.bean.backend.response.PageResp;
+import com.yuloran.lib_core.constant.ErrCode;
 import com.yuloran.lib_core.template.threadsafe.SafeMutableLiveData;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.StringUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.http.ApiProvider;
-import com.yuloran.lib_core.constant.ErrCode;
 import com.yuloran.lib_repository.http.common.CommonRequestException;
 import com.yuloran.lib_repository.http.common.CommonRequestSubscriber;
 import com.yuloran.lib_repository.http.common.ResponsePredicate;
+import com.yuloran.lib_repository.viewdata.ArticlesViewData;
+import com.yuloran.lib_repository.viewdata.ViewState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -57,59 +59,73 @@ public class ArticlesModel
 {
     private static final String TAG = "ArticlesModel";
 
-    private SafeMutableLiveData<ArticlesBean> mArticles = new SafeMutableLiveData<>();
+    private SafeMutableLiveData<ArticlesViewData> mArticles = new SafeMutableLiveData<>();
 
     private volatile Page mPage;
+
+    private boolean mIsLoading;
 
     public ArticlesModel()
     {
         // 使添加第一个observer时，也能收到回调
-        mArticles.setValue(null);
+        mArticles.setValue(new ArticlesViewData(ViewState.UNINITIALIZED));
     }
 
     @NonNull
     @MainThread
-    public SafeMutableLiveData<ArticlesBean> getArticles()
+    public SafeMutableLiveData<ArticlesViewData> getArticles()
     {
         return mArticles;
     }
 
+    @MainThread
     public <T> void fetch(@NonNull OfficialAccount account, LifecycleProvider<T> lifecycleProvider)
     {
         Objects.requireNonNull(account, "account is null!");
 
-        final int nextPage = mPage == null ? 1 : mPage.getCurPage() + 1;
-        boolean isOver = mPage != null && nextPage > mPage.getPageCount();
-        if (isOver)
+        int nextPage = 1;
+        if (mPage != null)
         {
-            Logger.info(TAG, "fetch: no more items.");
-            mArticles.setValue(new ArticlesBean(true));
+            nextPage = mPage.getCurPage() + 1;
+            if (nextPage > mPage.getPageCount())
+            {
+                Logger.warn(TAG, "fetch: over already, why fetch again?");
+                return;
+            }
+        }
+
+        if (mIsLoading)
+        {
+            Logger.info(TAG, "fetch: is loading, skip.");
             return;
         }
+
+        mArticles.setValue(new ArticlesViewData(ViewState.LOADING));
+        mIsLoading = true;
 
         ApiProvider.getInstance()
                    .getWanAndroidApi()
                    .getOfficialAccountArticles(account.getAccountId(), nextPage)
                    .filter(new ResponsePredicate<>())
-                   .map(new Function<PageResp, ArticlesBean>()
+                   .map(new Function<PageResp, ArticlesViewData>()
                    {
                        @Override
-                       public ArticlesBean apply(PageResp pageResp)
+                       public ArticlesViewData apply(PageResp pageResp)
                        {
                            mPage = pageResp.getPage();
                            if (mPage == null)
                            {
                                throw new CommonRequestException(ErrCode.NULL_RESPONSE, "page response is null!");
                            }
-                           return new ArticlesBean(mPage.getCurPage() > mPage.getPageCount(), mPage.getItems());
+                           return new ArticlesViewData(mPage.getCurPage() >= mPage.getPageCount(), mPage.getItems());
                        }
                    })
-                   .map(new Function<ArticlesBean, ArticlesBean>()
+                   .map(new Function<ArticlesViewData, ArticlesViewData>()
                    {
                        @Override
-                       public ArticlesBean apply(ArticlesBean articlesBean)
+                       public ArticlesViewData apply(ArticlesViewData articlesViewData)
                        {
-                           List<Item> articles = articlesBean.getArticles();
+                           List<Item> articles = articlesViewData.getViewData();
                            if (!ArrayUtil.isEmpty(articles))
                            {
                                List<Item> filtered = new ArrayList<>(articles);
@@ -124,36 +140,44 @@ public class ArticlesModel
                                    item.setTitle(Html.fromHtml(item.getTitle()).toString());
                                    filtered.add(item);
                                }
-                               articlesBean.setArticles(filtered);
+                               articlesViewData.setViewData(filtered);
                            }
-                           return articlesBean;
+                           return articlesViewData;
                        }
                    })
-                   .doOnNext(new Consumer<ArticlesBean>()
+                   .doOnNext(new Consumer<ArticlesViewData>()
                    {
                        @Override
-                       public void accept(ArticlesBean articlesBean)
+                       public void accept(ArticlesViewData articlesViewData)
                        {
-                           mArticles.setValue(articlesBean);
+                           mArticles.setValue(articlesViewData);
                        }
                    })
-                   .compose(lifecycleProvider.<ArticlesBean>bindToLifecycle())
+                   .compose(lifecycleProvider.<ArticlesViewData>bindToLifecycle())
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
-                   .subscribe(new CommonRequestSubscriber<ArticlesBean>()
+                   .doFinally(new Action()
                    {
                        @Override
-                       protected void onSuccess(@NonNull ArticlesBean articles)
+                       public void run() throws Exception
+                       {
+                           mIsLoading = false;
+                       }
+                   })
+                   .subscribe(new CommonRequestSubscriber<ArticlesViewData>()
+                   {
+                       @Override
+                       protected void onSuccess(@NonNull ArticlesViewData articles)
                        {
                            Logger.info(TAG, "getOfficialArticles$onSuccess, %d articles.", ArrayUtil.sizeof(articles
-                                   .getArticles()));
+                                   .getViewData()));
                        }
 
                        @Override
                        protected void onError(int errCode, @Nullable String errMsg)
                        {
                            Logger.error(TAG, "getOfficialArticles$onError: errCode:%d, errMsg:%s.", errCode, errMsg);
-                           mArticles.setValue(new ArticlesBean(false));
+                           mArticles.setValue(new ArticlesViewData(errCode, errMsg));
                        }
                    });
     }

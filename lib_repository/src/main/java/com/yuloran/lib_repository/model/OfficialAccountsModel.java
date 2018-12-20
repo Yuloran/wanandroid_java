@@ -15,9 +15,12 @@
  */
 package com.yuloran.lib_repository.model;
 
+import android.annotation.SuppressLint;
+
 import com.trello.rxlifecycle3.LifecycleProvider;
 import com.yuloran.lib_core.bean.backend.response.Section;
 import com.yuloran.lib_core.bean.backend.response.SectionResp;
+import com.yuloran.lib_core.template.threadsafe.SafeMutableLiveData;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.StringUtil;
@@ -27,15 +30,20 @@ import com.yuloran.lib_repository.database.OfficialAccountDao;
 import com.yuloran.lib_repository.http.ApiProvider;
 import com.yuloran.lib_repository.http.common.CommonRequestSubscriber;
 import com.yuloran.lib_repository.http.common.ResponsePredicate;
+import com.yuloran.lib_repository.viewdata.BaseViewData;
+import com.yuloran.lib_repository.viewdata.ViewState;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -48,19 +56,56 @@ import io.reactivex.schedulers.Schedulers;
  *
  * @since 1.0.0
  */
-public class OfficialAccountModel
+public class OfficialAccountsModel
 {
-    private static final String TAG = "OfficialAccountModel";
+    private static final String TAG = "OfficialAccountsModel";
 
-    @NonNull
-    public LiveData<List<OfficialAccount>> getOfficialAccounts()
+    private SafeMutableLiveData<BaseViewData<List<OfficialAccount>>> mOfficialAccounts = new SafeMutableLiveData<>();
+
+    private OfficialAccountDao mDao;
+
+    private boolean mIsLoading;
+
+    public OfficialAccountsModel()
     {
-        OfficialAccountDao officialAccountDao = AppDatabase.getInstance().officialAccountDao();
-        return officialAccountDao.query();
+        mOfficialAccounts.setValue(new BaseViewData<List<OfficialAccount>>(ViewState.UNINITIALIZED));
+        mDao = AppDatabase.getInstance().officialAccountDao();
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressLint("CheckResult")
+    @NonNull
+    public LiveData<BaseViewData<List<OfficialAccount>>> getOfficialAccounts()
+    {
+        Single.fromCallable(new Callable<List<OfficialAccount>>()
+        {
+            @Override
+            public List<OfficialAccount> call() throws Exception
+            {
+                return mDao.query();
+            }
+        }).subscribeOn(Schedulers.io()).subscribe(new Consumer<List<OfficialAccount>>()
+        {
+            @Override
+            public void accept(List<OfficialAccount> officialAccounts) throws Exception
+            {
+                mOfficialAccounts.setValue(new BaseViewData<>(officialAccounts));
+            }
+        });
+        return mOfficialAccounts;
     }
 
     public <T> void fetch(LifecycleProvider<T> lifecycleProvider)
     {
+        if (mIsLoading)
+        {
+            Logger.info(TAG, "fetch: is loading, skip.");
+            return;
+        }
+
+        mOfficialAccounts.setValue(new BaseViewData<List<OfficialAccount>>(ViewState.LOADING));
+        mIsLoading = true;
+
         ApiProvider.getInstance()
                    .getWanAndroidApi()
                    .getOfficialAccounts()
@@ -70,6 +115,14 @@ public class OfficialAccountModel
                    .compose(lifecycleProvider.<List<OfficialAccount>>bindToLifecycle())
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
+                   .doFinally(new Action()
+                   {
+                       @Override
+                       public void run() throws Exception
+                       {
+                           mIsLoading = false;
+                       }
+                   })
                    .subscribe(new CommonRequestSubscriber<List<OfficialAccount>>()
                    {
                        @Override
@@ -82,6 +135,8 @@ public class OfficialAccountModel
                        protected void onError(int errCode, @Nullable String errMsg)
                        {
                            Logger.error(TAG, "getOfficialAccounts$onError: errCode:%d, errMsg:%s.", errCode, errMsg);
+                           mOfficialAccounts.setValue(new BaseViewData<List<OfficialAccount>>(new ViewState(errCode,
+                                   errMsg)));
                        }
                    });
     }
@@ -111,7 +166,7 @@ public class OfficialAccountModel
         }
     }
 
-    private static class CacheAccounts implements Consumer<List<OfficialAccount>>
+    private class CacheAccounts implements Consumer<List<OfficialAccount>>
     {
         @Override
         public void accept(List<OfficialAccount> officialAccounts)
@@ -119,9 +174,9 @@ public class OfficialAccountModel
             Logger.info(TAG, "getOfficialAccounts$doOnNext: " + officialAccounts);
             // 使用liveData的问题：此处为增量更新，即有删除、更新、新增。这些操作是一个整体，
             // 但是liveData每个操作都会回调onChange()。
-            // TODO Room通过创建触发器监听表的修改(UPDATE, DELETE, INSERT), 需要修复多余回调问题
-            // TODO (1) 使用RxJava的debounce (2) 返回普通类型，自行封装为LiveData(推荐!)
-            AppDatabase.getInstance().officialAccountDao().bulkInsert(officialAccounts);
+            mDao.clear();
+            mDao.bulkInsert(officialAccounts);
+            mOfficialAccounts.setValue(new BaseViewData<>(officialAccounts));
         }
     }
 }

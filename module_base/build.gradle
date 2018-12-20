@@ -43,5 +43,6 @@ dependencies {
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.ext.arouter_compiler_version"
 
     // module
+    implementation project(':lib_repository')
     implementation project(':lib_core')
 }

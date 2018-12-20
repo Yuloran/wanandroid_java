@@ -17,12 +17,17 @@ package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import android.os.Bundle;
 
+import com.yuloran.lib_core.constant.Cons;
+import com.yuloran.lib_core.init.NetworkService;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
+import com.yuloran.lib_repository.viewdata.BaseViewData;
+import com.yuloran.lib_repository.viewdata.ViewState;
 import com.yuloran.module_base.ui.base.BaseTabLayoutViewPagerFragment;
 import com.yuloran.wanandroid_java.viewmodel.OfficialAccountVM;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.Observer;
@@ -40,11 +45,11 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
 {
     private static final String TAG = "OfficialAccountFragment";
 
-    private OfficialAccountVM mAccountVM;
+    private OfficialAccountVM mVM;
 
     private OfficialAccountPagerAdapter mPagerAdapter;
 
-    private int fetchCount;
+    private boolean mIsLoadFailure = false;
 
     @Override
     protected String logTag()
@@ -57,40 +62,57 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
     {
         super.onCreate(savedInstanceState);
 
-        mAccountVM = ViewModelProviders.of(this).get(OfficialAccountVM.class);
-        mAccountVM.getAccounts().observe(this, new Observer<List<OfficialAccount>>()
+        mVM = ViewModelProviders.of(this).get(OfficialAccountVM.class);
+        mVM.getAccounts().observe(this, new Observer<BaseViewData<List<OfficialAccount>>>()
         {
             @Override
-            public void onChanged(List<OfficialAccount> officialAccounts)
+            public void onChanged(BaseViewData<List<OfficialAccount>> viewData)
             {
-                Logger.info(TAG, "onChanged: " + officialAccounts);
-
-                officialAccounts = ArrayUtil.nonNull(officialAccounts);
-
-                // 仅fetch一次，否则当服务器数据为空时，会进入死循环
-                if (officialAccounts.isEmpty() && fetchCount == 0)
+                if (viewData == null)
                 {
-                    fetchCount++;
-                    mAccountVM.fetch(OfficialAccountFragment.this);
-                }
-
-                if (mPagerAdapter == null)
-                {
-                    Logger.info(TAG, "onChanged: init pagerAdapter.");
-                    mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), officialAccounts);
-                    mViewPager.setAdapter(mPagerAdapter);
+                    Logger.warn(TAG, "viewData is null!");
                     return;
                 }
 
-                Logger.info(TAG, "onChanged: update data source.");
-                mPagerAdapter.setDataSource(officialAccounts);
-                mPagerAdapter.notifyDataSetChanged();
+                ViewState viewState = viewData.getViewState();
+                switch (viewState.getViewState())
+                {
+                    case Cons.STATE_UNINITIALIZED:
+                        initAdapter();
+                        break;
+                    case Cons.STATE_LOADING:
+                        onLoading(viewState);
+                        break;
+                    case Cons.STATE_LOAD_SUCCESS:
+                        onLoadSuccess(viewState, viewData.getViewData());
+                        break;
+                    case Cons.STATE_LOAD_FAILURE:
+                        onLoadFailure(viewState);
+                        break;
+                    default:
+                }
+            }
+        });
+
+        NetworkService.getInstance().getNetworkInfoLiveData().observe(this, new Observer<NetworkService.NetworkInfo>()
+        {
+            @Override
+            public void onChanged(NetworkService.NetworkInfo networkInfo)
+            {
+                if (networkInfo.isConnected())
+                {
+                    if (mIsLoadFailure)
+                    {
+                        Logger.info(TAG, "network resumed, reload.");
+                        mVM.fetch(OfficialAccountFragment.this);
+                    }
+                }
             }
         });
     }
 
     @Override
-    public void onViewCreated()
+    public void onTabLayoutViewPagerCreated()
     {
         // FragmentPagerAdapter：Fragment超出缓存范围后，View会被销毁，但是Fragment只是调用onStop。
         // 再次跳至该Fragment时，需要重新绑定adapter。
@@ -98,5 +120,35 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
         {
             mViewPager.setAdapter(mPagerAdapter);
         }
+    }
+
+    private void initAdapter()
+    {
+        Logger.info(TAG, "onChanged: init pagerAdapter.");
+        mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), new ArrayList<OfficialAccount>());
+        mViewPager.setAdapter(mPagerAdapter);
+
+        mVM.fetch(OfficialAccountFragment.this);
+    }
+
+    private void onLoading(ViewState viewState)
+    {
+        setViewState(viewState);
+    }
+
+    private void onLoadSuccess(ViewState viewState, List<OfficialAccount> accounts)
+    {
+        Logger.info(TAG, "onChanged: load success, %d accounts.", ArrayUtil.sizeof(accounts));
+        setViewState(viewState);
+        mPagerAdapter.setDataSource(ArrayUtil.nonNull(accounts));
+        mPagerAdapter.notifyDataSetChanged();
+        mIsLoadFailure = false;
+    }
+
+    private void onLoadFailure(ViewState viewState)
+    {
+        Logger.info(TAG, "onChanged: load failure(%d/%s).", viewState.getErrCode(), viewState.getErrMsg());
+        setViewState(viewState);
+        mIsLoadFailure = true;
     }
 }
