@@ -61,22 +61,6 @@ public class EmptyView extends LinearLayout
         mErrDescription = findViewById(R.id.error_description);
     }
 
-    public void setErrIcon(int resId)
-    {
-        if (resId != 0)
-        {
-            mErrIcon.setImageResource(resId);
-        }
-    }
-
-    public void setErrDescription(int resId)
-    {
-        if (resId != 0)
-        {
-            mErrDescription.setText(resId);
-        }
-    }
-
     public void setViewState(ViewState viewState)
     {
         Logger.debug(TAG, "setViewState: " + viewState);

@@ -49,7 +49,7 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
 
     private OfficialAccountPagerAdapter mPagerAdapter;
 
-    private boolean mIsLoadFailure = false;
+    private ViewState mViewState;
 
     @Override
     protected String logTag()
@@ -74,20 +74,20 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
                     return;
                 }
 
-                ViewState viewState = viewData.getViewState();
-                switch (viewState.getViewState())
+                mViewState = viewData.getViewState();
+                switch (mViewState.getViewState())
                 {
                     case Cons.STATE_UNINITIALIZED:
                         initAdapter();
                         break;
                     case Cons.STATE_LOADING:
-                        onLoading(viewState);
+                        onLoading(mViewState);
                         break;
                     case Cons.STATE_LOAD_SUCCESS:
-                        onLoadSuccess(viewState, viewData.getViewData());
+                        onLoadSuccess(mViewState, viewData.getViewData());
                         break;
                     case Cons.STATE_LOAD_FAILURE:
-                        onLoadFailure(viewState);
+                        onLoadFailure(mViewState);
                         break;
                     default:
                 }
@@ -101,7 +101,7 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
             {
                 if (networkInfo.isConnected())
                 {
-                    if (mIsLoadFailure)
+                    if (mViewState.getViewState() == Cons.STATE_LOAD_FAILURE)
                     {
                         Logger.info(TAG, "network resumed, reload.");
                         mVM.fetch(OfficialAccountFragment.this);
@@ -118,6 +118,10 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
         // 再次跳至该Fragment时，需要重新绑定adapter。
         if (mPagerAdapter != null)
         {
+            if (mViewState != null)
+            {
+                setViewState(mViewState);
+            }
             mViewPager.setAdapter(mPagerAdapter);
         }
     }
@@ -142,13 +146,11 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
         setViewState(viewState);
         mPagerAdapter.setDataSource(ArrayUtil.nonNull(accounts));
         mPagerAdapter.notifyDataSetChanged();
-        mIsLoadFailure = false;
     }
 
     private void onLoadFailure(ViewState viewState)
     {
         Logger.info(TAG, "onChanged: load failure(%d/%s).", viewState.getErrCode(), viewState.getErrMsg());
         setViewState(viewState);
-        mIsLoadFailure = true;
     }
 }

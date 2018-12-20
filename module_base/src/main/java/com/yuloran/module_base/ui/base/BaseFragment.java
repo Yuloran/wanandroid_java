@@ -178,9 +178,10 @@ public abstract class BaseFragment extends RxFragment
 
     public void setViewState(ViewState viewState)
     {
-        if (mEmptyView == null)
+        ViewStub stub = mRoot.findViewById(R.id.fragment_stub_import);
+        if (stub != null)
         {
-            mEmptyView = (EmptyView) ((ViewStub) mRoot.findViewById(R.id.fragment_stub_import)).inflate();
+            mEmptyView = (EmptyView) stub.inflate();
         }
 
         switch (viewState.getViewState())
