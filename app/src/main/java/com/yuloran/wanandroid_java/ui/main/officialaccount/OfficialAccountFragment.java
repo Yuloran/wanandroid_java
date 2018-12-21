@@ -17,13 +17,13 @@ package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import android.os.Bundle;
 
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.lib_core.constant.Cons;
 import com.yuloran.lib_core.init.NetworkService;
 import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.viewdata.BaseViewData;
-import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.ui.base.BaseTabLayoutViewPagerFragment;
 import com.yuloran.wanandroid_java.viewmodel.OfficialAccountVM;
 
@@ -49,7 +49,7 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
 
     private OfficialAccountPagerAdapter mPagerAdapter;
 
-    private ViewState mViewState;
+    private ViewState mViewState = ViewState.UNINITIALIZED;
 
     @Override
     protected String logTag()
@@ -75,7 +75,7 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
                 }
 
                 mViewState = viewData.getViewState();
-                switch (mViewState.getViewState())
+                switch (mViewState.getState())
                 {
                     case Cons.STATE_UNINITIALIZED:
                         initAdapter();
@@ -99,9 +99,10 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
             @Override
             public void onChanged(NetworkService.NetworkInfo networkInfo)
             {
+                // TODO Bug: Fragment生命周期改变时会回调LiveData的onStateChanged(), 导致发射上一次的值, 目前无法修复
                 if (networkInfo.isConnected())
                 {
-                    if (mViewState.getViewState() == Cons.STATE_LOAD_FAILURE)
+                    if (mViewState.isFailed())
                     {
                         Logger.info(TAG, "network resumed, reload.");
                         mVM.fetch(OfficialAccountFragment.this);
@@ -131,7 +132,7 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
         Logger.info(TAG, "onChanged: init pagerAdapter.");
         mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), new ArrayList<OfficialAccount>());
         mViewPager.setAdapter(mPagerAdapter);
-
+        Logger.info(TAG, "onChanged: fetch data.");
         mVM.fetch(OfficialAccountFragment.this);
     }
 

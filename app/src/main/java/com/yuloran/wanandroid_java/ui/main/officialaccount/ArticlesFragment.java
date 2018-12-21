@@ -17,6 +17,7 @@ package com.yuloran.wanandroid_java.ui.main.officialaccount;
 
 import android.os.Bundle;
 
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.constant.Cons;
 import com.yuloran.lib_core.init.NetworkService;
@@ -26,7 +27,6 @@ import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.viewdata.ArticlesViewData;
-import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.ui.adapter.recyclerview.MultiTypeAdapterEx;
 import com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreDelegate;
@@ -51,19 +51,20 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
 {
     private static final String TAG = "ArticlesFragment";
 
-    @Override
-    protected String logTag()
-    {
-        return TAG;
-    }
-
     private OfficialAccount mOfficialAccount;
 
     private ArticlesVM mVM;
 
     private MultiTypeAdapterEx mMultiTypeAdapter;
 
-    private boolean mIsPage1Loaded;
+    /** Fragment整体的加载状态 */
+    private ViewState mViewState = ViewState.UNINITIALIZED;
+
+    @Override
+    protected String logTag()
+    {
+        return TAG;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -88,20 +89,27 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
                     return;
                 }
 
-                ViewState viewState = viewData.getViewState();
-                switch (viewState.getViewState())
+                // 因为这个页面是分页加载的，所以只要第一页加载成功后，就无需再刷新viewState
+                ViewState latest = viewData.getViewState();
+
+                if (!mViewState.isSuccessful())
+                {
+                    mViewState = latest;
+                }
+
+                switch (latest.getState())
                 {
                     case Cons.STATE_UNINITIALIZED:
                         initAdapter();
                         break;
                     case Cons.STATE_LOADING:
-                        onLoading(viewState);
+                        onLoading(latest);
                         break;
                     case Cons.STATE_LOAD_SUCCESS:
                         onLoadSuccess(viewData);
                         break;
                     case Cons.STATE_LOAD_FAILURE:
-                        onLoadFailure(viewState);
+                        onLoadFailure(latest);
                         break;
                     default:
                 }
@@ -130,7 +138,7 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
             {
                 if (networkInfo.isConnected())
                 {
-                    if (!mIsPage1Loaded)
+                    if (mViewState.isFailed())
                     {
                         Logger.info(TAG, "network resumed, reload.");
                         mVM.fetch(mOfficialAccount, ArticlesFragment.this);
@@ -158,36 +166,37 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
         mMultiTypeAdapter.register(LoadMoreItem.class, new LoadMoreItemViewBinder());
         mMultiTypeAdapter.setOnLoadMoreListener(this);
         mRecyclerView.setAdapter(mMultiTypeAdapter);
-
+        Logger.info(TAG, "onChanged: fetch data.");
         mVM.fetch(mOfficialAccount, ArticlesFragment.this);
     }
 
-    private void onLoading(ViewState viewState)
+    private void onLoading(ViewState latest)
     {
-        Logger.info(TAG, "onChanged: onLoading(is page1 loaded? %b)...", mIsPage1Loaded);
-        if (!mIsPage1Loaded)
+        boolean page1Loaded = mViewState.isSuccessful();
+        Logger.info(TAG, "onChanged: onLoading(is page1 loaded? %b)...", page1Loaded);
+        if (!page1Loaded)
         {
-            setViewState(viewState);
+            setViewState(latest);
         }
     }
 
     private void onLoadSuccess(ArticlesViewData viewData)
     {
         Logger.info(TAG, "obChanged: load success, %d articles.", ArrayUtil.sizeof(viewData.getViewData()));
-        mIsPage1Loaded = true;
         setViewState(viewData.getViewState());
         mMultiTypeAdapter.setLoadState(viewData.isOver() ? LoadMoreDelegate.LOAD_OVER : LoadMoreDelegate.LOAD_COMPLETE);
         mMultiTypeAdapter.addAll(viewData.getViewData());
     }
 
-    private void onLoadFailure(ViewState viewState)
+    private void onLoadFailure(ViewState latest)
     {
-        Logger.info(TAG, "onChanged: load failure(is page1 loaded? %b, %d/%s).", mIsPage1Loaded, viewState.getErrCode
-                (), viewState
+        boolean page1Loaded = mViewState.isSuccessful();
+        Logger.info(TAG, "onChanged: load failure(is page1 loaded? %b, %d/%s).", page1Loaded, latest.getErrCode(),
+                latest
                 .getErrMsg());
-        if (!mIsPage1Loaded)
+        if (!page1Loaded)
         {
-            setViewState(viewState);
+            setViewState(latest);
         }
     }
 

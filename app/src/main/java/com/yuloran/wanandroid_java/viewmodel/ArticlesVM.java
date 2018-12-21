@@ -16,13 +16,13 @@
 package com.yuloran.wanandroid_java.viewmodel;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
-import com.yuloran.lib_repository.viewdata.ArticlesViewData;
 import com.yuloran.lib_core.bean.backend.response.Item;
 import com.yuloran.lib_core.template.SingleLiveEvent;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.ThreadUtil;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.model.ArticlesModel;
+import com.yuloran.lib_repository.viewdata.ArticlesViewData;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -67,7 +67,7 @@ public class ArticlesVM extends ViewModel
 
     public <T> void fetch(@NonNull OfficialAccount account, LifecycleProvider<T> lifecycleProvider)
     {
-        Logger.info(TAG, "fetch: cache expired, fetch from server.");
+        Logger.info(TAG, "fetch from server.");
         mModel.fetch(account, lifecycleProvider);
     }
 

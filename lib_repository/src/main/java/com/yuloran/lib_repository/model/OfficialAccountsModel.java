@@ -18,6 +18,7 @@ package com.yuloran.lib_repository.model;
 import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle3.LifecycleProvider;
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.lib_core.bean.backend.response.Section;
 import com.yuloran.lib_core.bean.backend.response.SectionResp;
 import com.yuloran.lib_core.template.threadsafe.SafeMutableLiveData;
@@ -31,7 +32,6 @@ import com.yuloran.lib_repository.http.ApiProvider;
 import com.yuloran.lib_repository.http.common.CommonRequestSubscriber;
 import com.yuloran.lib_repository.http.common.ResponsePredicate;
 import com.yuloran.lib_repository.viewdata.BaseViewData;
-import com.yuloran.lib_core.bean.ViewState;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,7 +89,10 @@ public class OfficialAccountsModel
             @Override
             public void accept(List<OfficialAccount> officialAccounts) throws Exception
             {
-                mOfficialAccounts.setValue(new BaseViewData<>(officialAccounts));
+                if (!officialAccounts.isEmpty())
+                {
+                    mOfficialAccounts.setValue(new BaseViewData<>(officialAccounts));
+                }
             }
         });
         return mOfficialAccounts;

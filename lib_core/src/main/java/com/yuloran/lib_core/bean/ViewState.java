@@ -18,7 +18,7 @@ package com.yuloran.lib_core.bean;
 import com.yuloran.lib_core.constant.Cons;
 
 /**
- * [Description]
+ * [View State]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/20 21:55
@@ -33,27 +33,27 @@ public final class ViewState
 
     public static final ViewState LOAD_SUCCESS = new ViewState(Cons.STATE_LOAD_SUCCESS);
 
-    private int viewState;
+    private int state;
 
     private int errCode;
 
     private String errMsg;
 
-    private ViewState(int viewState)
+    private ViewState(int state)
     {
-        this.viewState = viewState;
+        this.state = state;
     }
 
     public ViewState(int errCode, String errMsg)
     {
-        this.viewState = Cons.STATE_LOAD_FAILURE;
+        this.state = Cons.STATE_LOAD_FAILURE;
         this.errCode = errCode;
         this.errMsg = errMsg;
     }
 
-    public int getViewState()
+    public int getState()
     {
-        return viewState;
+        return state;
     }
 
     public int getErrCode()
@@ -66,9 +66,29 @@ public final class ViewState
         return errMsg;
     }
 
+    public boolean isUnInitialized()
+    {
+        return state == Cons.STATE_UNINITIALIZED;
+    }
+
+    public boolean isLoading()
+    {
+        return state == Cons.STATE_LOADING;
+    }
+
+    public boolean isSuccessful()
+    {
+        return state == Cons.STATE_LOAD_SUCCESS;
+    }
+
+    public boolean isFailed()
+    {
+        return state == Cons.STATE_LOAD_FAILURE;
+    }
+
     @Override
     public String toString()
     {
-        return "ViewState{" + "viewState=" + viewState + ", errCode=" + errCode + ", errMsg='" + errMsg + '\'' + '}';
+        return "ViewState{" + "state=" + state + ", errCode=" + errCode + ", errMsg='" + errMsg + '\'' + '}';
     }
 }

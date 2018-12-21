@@ -23,9 +23,9 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.trello.rxlifecycle3.components.support.RxFragment;
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.lib_core.constant.Cons;
 import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.R;
 import com.yuloran.module_base.ui.widget.EmptyView;
 
@@ -42,7 +42,7 @@ import androidx.annotation.Nullable;
  */
 public abstract class BaseFragment extends RxFragment
 {
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private View mRoot;
 
@@ -53,6 +53,15 @@ public abstract class BaseFragment extends RxFragment
     protected abstract String logTag();
 
     protected abstract void onRootInflated(@NonNull LayoutInflater inflater, @NonNull ViewGroup contentParent);
+
+    /**
+     * Fragment可见性改变：如果Fragment第一次创建，该方法在onCreate()前回调，否则在onCreate()后执行
+     *
+     * @param isVisible true: 可见
+     */
+    protected void onVisibleChanged(boolean isVisible)
+    {
+    }
 
     @Override
     public void onAttach(Context context)
@@ -174,9 +183,10 @@ public abstract class BaseFragment extends RxFragment
     {
         Logger.debug(logTag(), "setUserVisibleHint: " + isVisibleToUser);
         super.setUserVisibleHint(isVisibleToUser);
+        onVisibleChanged(isVisibleToUser);
     }
 
-    public void setViewState(ViewState viewState)
+    protected void setViewState(ViewState viewState)
     {
         ViewStub stub = mRoot.findViewById(R.id.fragment_stub_import);
         if (stub != null)
@@ -184,7 +194,14 @@ public abstract class BaseFragment extends RxFragment
             mEmptyView = (EmptyView) stub.inflate();
         }
 
-        switch (viewState.getViewState())
+        // 极低的概率会出现，不知道到为什么....
+        if (mEmptyView == null)
+        {
+            Logger.warn(logTag(), "setViewState: mEmptyView is null!");
+            return;
+        }
+
+        switch (viewState.getState())
         {
             case Cons.STATE_LOADING:
                 mContentParent.setVisibility(View.GONE);

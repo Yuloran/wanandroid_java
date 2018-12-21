@@ -64,7 +64,7 @@ public class EmptyView extends LinearLayout
     public void setViewState(ViewState viewState)
     {
         Logger.debug(TAG, "setViewState: " + viewState);
-        switch (viewState.getViewState())
+        switch (viewState.getState())
         {
             case Cons.STATE_LOADING:
                 mLoading.setVisibility(VISIBLE);

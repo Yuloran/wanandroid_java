@@ -56,7 +56,7 @@ public class OfficialAccountVM extends ViewModel
 
     public <T> void fetch(LifecycleProvider<T> lifecycleProvider)
     {
-        Logger.info(TAG, "fetch: cache expired, fetch from server.");
+        Logger.info(TAG, "fetch from server.");
         mModel.fetch(lifecycleProvider);
     }
 

@@ -291,9 +291,18 @@ public final class NetworkService implements IInit
     /** 网络连接动作类型 */
     public enum ConnectivityAction
     {
+        /**
+         * 网络已连接，且成mobile切换成wifi
+         */
         CONNECTIVITY_MOBILE_TO_WIFI("changed: mobile to wifi."),
-        /** 测试结果：断开wifi时，即使mobile是连接状态，返回的也是无网络，稍候才能返回mobile已连接 */
+        /**
+         * 网络已连接，且成wifi切换成mobile。测试发现：断开wifi时，即使mobile是连接状态，返回的也是无网络，稍候才能返回mobile已连接。
+         * 所以，这个状态实际不会出现。
+         */
         CONNECTIVITY_WIFI_TO_MOBILE("changed: wifi to mobile."),
+        /**
+         * 网络连通性没有变化
+         */
         CONNECTIVITY_NOT_CHANGE("connectivity not change."),
         DISCONNECTED_TO_CONNECTED("disconnected to connected."),
         CONNECTED_TO_DISCONNECTED("connected to disconnected.");

@@ -15,7 +15,6 @@
  */
 package com.yuloran.wanandroid_java.ui.main.project;
 
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ import com.yuloran.module_base.ui.base.BaseFragment;
 import com.yuloran.wanandroid_java.ui.TabConfig;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 /**
  * [项目页的Fragment]
