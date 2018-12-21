@@ -79,9 +79,9 @@ public final class NetworkService implements IInit
     }
 
     @Override
-    public boolean lazyInit()
+    public boolean canInitInBackground()
     {
-        return false;
+        return true;
     }
 
     @Override

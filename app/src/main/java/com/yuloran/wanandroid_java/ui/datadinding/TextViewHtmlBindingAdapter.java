@@ -29,7 +29,7 @@ import androidx.databinding.BindingAdapter;
  */
 public final class TextViewHtmlBindingAdapter
 {
-    @BindingAdapter("app:text")
+    @BindingAdapter("text")
     public static void setText(TextView textView, String title)
     {
         // html符号转换已转移至model中，以避免在UI线程中解析html

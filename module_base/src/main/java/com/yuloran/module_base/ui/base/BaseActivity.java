@@ -48,6 +48,9 @@ public abstract class BaseActivity extends RxFragmentActivity
 
         setContentView(R.layout.base_activity);
 
+        // 因为BaseActivity也设置了background，所以此时可以去除AppTheme中设置的windowBackground，避免过度绘制
+        getWindow().setBackgroundDrawable(null);
+
         ActionBar actionBar = findViewById(R.id.action_bar);
         actionBar.getBack().setOnClickListener(new View.OnClickListener()
         {

@@ -23,7 +23,7 @@ import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.viewdata.BaseViewData;
-import com.yuloran.lib_repository.viewdata.ViewState;
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.ui.base.BaseTabLayoutViewPagerFragment;
 import com.yuloran.wanandroid_java.viewmodel.OfficialAccountVM;
 

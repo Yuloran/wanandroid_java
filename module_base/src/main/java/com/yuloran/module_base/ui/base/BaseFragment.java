@@ -25,7 +25,7 @@ import android.view.ViewStub;
 import com.trello.rxlifecycle3.components.support.RxFragment;
 import com.yuloran.lib_core.constant.Cons;
 import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.lib_repository.viewdata.ViewState;
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.R;
 import com.yuloran.module_base.ui.widget.EmptyView;
 

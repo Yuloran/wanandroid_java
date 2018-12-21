@@ -34,7 +34,7 @@ interface IInit
      *
      * @return true：可以懒初始化
      */
-    boolean lazyInit();
+    boolean canInitInBackground();
 
     /**
      * 初始化

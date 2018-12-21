@@ -32,7 +32,7 @@ import com.yuloran.lib_repository.http.common.CommonRequestException;
 import com.yuloran.lib_repository.http.common.CommonRequestSubscriber;
 import com.yuloran.lib_repository.http.common.ResponsePredicate;
 import com.yuloran.lib_repository.viewdata.ArticlesViewData;
-import com.yuloran.lib_repository.viewdata.ViewState;
+import com.yuloran.lib_core.bean.ViewState;
 
 import java.util.ArrayList;
 import java.util.List;

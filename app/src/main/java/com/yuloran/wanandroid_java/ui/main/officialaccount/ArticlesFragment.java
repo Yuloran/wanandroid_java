@@ -26,7 +26,7 @@ import com.yuloran.lib_core.utils.ArrayUtil;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_repository.database.OfficialAccount;
 import com.yuloran.lib_repository.viewdata.ArticlesViewData;
-import com.yuloran.lib_repository.viewdata.ViewState;
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.ui.adapter.recyclerview.MultiTypeAdapterEx;
 import com.yuloran.module_base.ui.adapter.recyclerview.OnItemClickListener;
 import com.yuloran.module_base.ui.adapter.recyclerview.loadmore.LoadMoreDelegate;

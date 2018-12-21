@@ -15,6 +15,7 @@
  */
 package com.yuloran.lib_repository.viewdata;
 
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.lib_core.bean.backend.response.Item;
 
 import java.util.List;

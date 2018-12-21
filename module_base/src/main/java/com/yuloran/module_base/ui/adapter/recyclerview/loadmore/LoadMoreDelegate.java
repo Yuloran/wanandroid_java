@@ -18,6 +18,8 @@ package com.yuloran.module_base.ui.adapter.recyclerview.loadmore;
 import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.module_base.ui.adapter.recyclerview.MultiTypeAdapterEx;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Objects;
 
 import androidx.annotation.AnyThread;
@@ -38,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public final class LoadMoreDelegate
 {
     @IntDef({LOAD_COMPLETE, LOAD_OVER})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface LoadSate
     {
     }

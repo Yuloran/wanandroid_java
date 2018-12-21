@@ -28,6 +28,7 @@ import com.yuloran.lib_core.utils.StringUtil;
 import com.yuloran.module_base.R;
 import com.yuloran.module_base.ui.base.BaseActivity;
 import com.yuloran.module_base.ui.widget.ActionBar;
+import com.yuloran.module_base.util.ResUtil;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -82,7 +83,7 @@ public class HtmlActivity extends BaseActivity
             mAgentWeb = AgentWeb.with(this)
                                 .setAgentWebParent(contentRoot, new ViewGroup.LayoutParams(ViewGroup.LayoutParams
                                         .MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-                                .useDefaultIndicator()
+                                .useDefaultIndicator(ResUtil.getColor(R.color.toolbar_background))
                                 .setMainFrameErrorView(R.layout.layout_empty, R.id.error_icon)
                                 .createAgentWeb()
                                 .ready()

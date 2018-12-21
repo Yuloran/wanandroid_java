@@ -18,6 +18,7 @@ package com.yuloran.lib_core.init;
 import android.app.Application;
 
 import com.yuloran.lib_core.template.Singleton;
+import com.yuloran.lib_core.utils.Logger;
 import com.yuloran.lib_core.utils.SingleWorker;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public final class ServiceManager implements IInit
     }
 
     @Override
-    public boolean lazyInit()
+    public boolean canInitInBackground()
     {
         return false;
     }
@@ -80,19 +81,25 @@ public final class ServiceManager implements IInit
 
         for (final IInit init : mServices)
         {
-            if (init.lazyInit())
+            if (init.canInitInBackground())
             {
                 SingleWorker.submit(new Runnable()
                 {
                     @Override
                     public void run()
                     {
+                        long begin = System.currentTimeMillis();
                         init.init(application);
+                        long cost = System.currentTimeMillis() - begin;
+                        Logger.debug(TAG, "%s init took %dms(background thread).", init.getClass().getSimpleName(), cost);
                     }
                 });
             } else
             {
+                long begin = System.currentTimeMillis();
                 init.init(application);
+                long cost = System.currentTimeMillis() - begin;
+                Logger.debug(TAG, "%s init took %dms(main thread).", init.getClass().getSimpleName(), cost);
             }
         }
     }

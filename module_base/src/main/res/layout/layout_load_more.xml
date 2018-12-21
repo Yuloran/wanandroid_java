@@ -12,5 +12,6 @@
         style="@android:style/Widget.Material.ProgressBar"
         android:layout_width="22dp"
         android:layout_height="22dp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/toolbar_background" />
 </FrameLayout>

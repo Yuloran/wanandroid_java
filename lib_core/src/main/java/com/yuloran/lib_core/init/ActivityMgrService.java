@@ -57,7 +57,7 @@ public final class ActivityMgrService implements IInit, Application.ActivityLife
      * @return true：可以懒初始化
      */
     @Override
-    public boolean lazyInit()
+    public boolean canInitInBackground()
     {
         return false;
     }

@@ -61,9 +61,9 @@ public final class RouterService implements IInit
     }
 
     @Override
-    public boolean lazyInit()
+    public boolean canInitInBackground()
     {
-        return false;
+        return true;
     }
 
     @Override

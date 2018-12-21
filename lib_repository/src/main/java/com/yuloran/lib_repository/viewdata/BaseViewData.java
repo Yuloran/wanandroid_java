@@ -15,6 +15,8 @@
  */
 package com.yuloran.lib_repository.viewdata;
 
+import com.yuloran.lib_core.bean.ViewState;
+
 import java.util.Objects;
 
 import androidx.annotation.NonNull;

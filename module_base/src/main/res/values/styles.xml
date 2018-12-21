@@ -1,6 +1,7 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@drawable/window_background</item>
         <item name="android:statusBarColor">@color/toolbar_background</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

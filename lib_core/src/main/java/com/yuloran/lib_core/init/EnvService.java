@@ -67,7 +67,7 @@ public final class EnvService implements IInit
     }
 
     @Override
-    public boolean lazyInit()
+    public boolean canInitInBackground()
     {
         return false;
     }

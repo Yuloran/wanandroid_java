@@ -22,7 +22,7 @@ import android.widget.ProgressBar;
 
 import com.yuloran.lib_core.constant.Cons;
 import com.yuloran.lib_core.utils.Logger;
-import com.yuloran.lib_repository.viewdata.ViewState;
+import com.yuloran.lib_core.bean.ViewState;
 import com.yuloran.module_base.R;
 
 import androidx.annotation.Nullable;

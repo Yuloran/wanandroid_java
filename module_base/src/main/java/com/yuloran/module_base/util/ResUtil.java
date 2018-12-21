@@ -17,6 +17,7 @@ package com.yuloran.module_base.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.yuloran.lib_core.init.EnvService;
@@ -24,16 +25,19 @@ import com.yuloran.lib_core.utils.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.ArrayRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.collection.SimpleArrayMap;
 import androidx.fragment.app.Fragment;
 
 /**
- * [资源管理器]
+ * [资源访问器]
  * <p>
  * Author: Yuloran
  * Date Added: 2018/12/14 18:00
@@ -52,42 +56,54 @@ public final class ResUtil
     {
     }
 
-    @NonNull
-    public static List<String> getStringArray(int id)
+    @Nullable
+    public static List<String> getStringArray(@ArrayRes int resId)
     {
-        if (id <= 0)
+        if (resId != 0)
         {
-            return Collections.emptyList();
+            try
+            {
+                String[] stringArray = sResources.getStringArray(resId);
+                // 注意：int、char等基本类型不能直接使用asList()转换
+                return Arrays.asList(stringArray);
+            } catch (Resources.NotFoundException e)
+            {
+                Logger.error(TAG, "getStringArray: not found with id " + resId);
+            }
         }
-
-        try
-        {
-            String[] stringArray = sResources.getStringArray(id);
-            // 注意：int、char等基本类型不能直接使用asList()转换
-            return Arrays.asList(stringArray);
-        } catch (Resources.NotFoundException e)
-        {
-            Logger.error(TAG, "getStringArray: not found with id " + id);
-        }
-        return Collections.emptyList();
+        return null;
     }
 
     @NonNull
-    public static String getString(int id)
+    public static String getString(@StringRes int resId)
     {
-        if (id <= 0)
+        if (resId != 0)
         {
-            return "";
-        }
-
-        try
-        {
-            return sResources.getString(id);
-        } catch (Resources.NotFoundException e)
-        {
-            Logger.error(TAG, "getString: not found with id " + id);
+            try
+            {
+                return sResources.getString(resId);
+            } catch (Resources.NotFoundException e)
+            {
+                Logger.error(TAG, "getString: not found with id " + resId);
+            }
         }
         return "";
+    }
+
+    @ColorInt
+    public static int getColor(@ColorRes int resId)
+    {
+        if (resId != 0)
+        {
+            try
+            {
+                return sResources.getColor(resId, null);
+            } catch (Resources.NotFoundException e)
+            {
+                Logger.error(TAG, "getColor: not found with id " + resId);
+            }
+        }
+        return Color.WHITE;
     }
 
     /**
@@ -123,11 +139,13 @@ public final class ResUtil
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e)
         {
             throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": make " +
-                    "sure class name exists, is public, and has an empty constructor that is public", e);
+                    "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + ""
+                    + "" + "sure " + "class " + "name " + "" + "exists, is" + " " + "public, " + "and " + "has an " +
+                    "empty" + " " + "constructor " + "that is" + " " + "public", e);
         } catch (NoSuchMethodException e)
         {
-            throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": could" +
-                    " not find Fragment constructor", e);
+            throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": " +
+                    "could" + " not find Fragment constructor", e);
         } catch (InvocationTargetException e)
         {
             throw new Fragment.InstantiationException("Unable to instantiate fragment " + fullFragmentName + ": " +
