@@ -54,6 +54,6 @@ public class ProjectFragment extends BaseFragment
         layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
         textView.setLayoutParams(layoutParams);
         textView.setGravity(Gravity.CENTER);
-        textView.setText(TabConfig.Tab.CATEGORY.getTitle());
+        textView.setText(TabConfig.Tab.PROJECT.getTitle());
     }
 }
