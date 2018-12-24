@@ -26,7 +26,7 @@ wanandroid_java is an android client for [wanandroid open API](http://wanandroid
 - [ArrayUtil](lib_core/src/main/java/com/yuloran/lib_core/utils/ArrayUtil.java)
 - [SafeBroadCastReceiver](lib_core/src/main/java/com/yuloran/lib_core/template/nullsafe/SafeBroadCastReceiver.java)
 
-**Work around [LiveData]() bugs**
+**Work around [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) bugs**
 
 - [SingleLiveEvent](lib_core/src/main/java/com/yuloran/lib_core/template/SingleLiveEvent.java)
 - [SafeMutableLiveData](lib_core/src/main/java/com/yuloran/lib_core/template/threadsafe/SafeMutableLiveData.java)
@@ -40,9 +40,11 @@ wanandroid_java is an android client for [wanandroid open API](http://wanandroid
 
 - [ResUtil](module_base/src/main/java/com/yuloran/module_base/util/ResUtil.java)
 
-**Extensions for [MultiTypeAdapter]()**
+**Extensions for [MultiTypeAdapter](https://github.com/drakeet/MultiType)**
 
 - [ViewHolder for dataBinding](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/databinding)
 - [Load more](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/loadmore)
 - [OnItemClickLienter for dataBinding](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/OnItemClickListener.java)
 - [MultiTypeAdapterEx](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/MultiTypeAdapterEx.java)
+
+**[GIF Compress Website](https://ezgif.com/maker)**
