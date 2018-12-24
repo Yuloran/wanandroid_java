@@ -118,7 +118,7 @@ public final class ActivityMgrService implements IInit, Application.ActivityLife
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState)
     {
-        Logger.info(TAG, "%s created.", activity.getClass().getSimpleName());
+        Logger.info(TAG, "%s stateSaved.", activity.getClass().getSimpleName());
     }
 
     @Override

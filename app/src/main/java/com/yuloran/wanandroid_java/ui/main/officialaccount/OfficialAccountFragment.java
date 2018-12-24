@@ -78,7 +78,7 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
                 switch (mViewState.getState())
                 {
                     case Cons.STATE_UNINITIALIZED:
-                        initAdapter();
+                        onInit();
                         break;
                     case Cons.STATE_LOADING:
                         onLoading(mViewState);
@@ -115,29 +115,38 @@ public class OfficialAccountFragment extends BaseTabLayoutViewPagerFragment
     @Override
     public void onTabLayoutViewPagerCreated()
     {
+        if (mPagerAdapter == null)
+        {
+            Logger.info(TAG, "onTabLayoutViewPagerCreated: init pagerAdapter.");
+            mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), new ArrayList<OfficialAccount>
+                    ());
+            mViewPager.setAdapter(mPagerAdapter);
+            return;
+        }
+
+        Logger.info(TAG, "onTabLayoutViewPagerCreated: rebind pagerAdapter.");
         // FragmentPagerAdapter：Fragment超出缓存范围后，View会被销毁，但是Fragment只是调用onStop。
         // 再次跳至该Fragment时，需要重新绑定adapter。
-        if (mPagerAdapter != null)
+        if (mViewState != null)
         {
-            if (mViewState != null)
-            {
-                setViewState(mViewState);
-            }
-            mViewPager.setAdapter(mPagerAdapter);
+            setViewState(mViewState);
         }
+        mViewPager.setAdapter(mPagerAdapter);
     }
 
-    private void initAdapter()
+    private void onInit()
     {
-        Logger.info(TAG, "onChanged: init pagerAdapter.");
-        mPagerAdapter = new OfficialAccountPagerAdapter(getChildFragmentManager(), new ArrayList<OfficialAccount>());
-        mViewPager.setAdapter(mPagerAdapter);
+        // 删除初始化adapter逻辑，不能依赖LiveData的回调来初始化。因为当设备配置改变时，Activity如果没有在manifest中配置，那么
+        // Activity的生命周期如下：paused->stateSaved->stopped->destroyed->created->started->resumed. destroy时，LiveData
+        // 会自动移除之前的监听。我们在onCreate()重新加了一个监听，当进入started状态后，LiveData就会重新发射上次的值(因为observer
+        // 内部的版本号与value的版本号不一致)，这个值的viewState不确定，因为之前没有初始化adapter，所以可能导致NPE。
         Logger.info(TAG, "onChanged: fetch data.");
         mVM.fetch(OfficialAccountFragment.this);
     }
 
     private void onLoading(ViewState viewState)
     {
+        Logger.info(TAG, "onChanged: loading...");
         setViewState(viewState);
     }
 

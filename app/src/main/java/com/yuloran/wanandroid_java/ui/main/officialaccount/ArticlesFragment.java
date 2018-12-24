@@ -100,7 +100,7 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
                 switch (latest.getState())
                 {
                     case Cons.STATE_UNINITIALIZED:
-                        initAdapter();
+                        onInit();
                         break;
                     case Cons.STATE_LOADING:
                         onLoading(latest);
@@ -151,21 +151,24 @@ public class ArticlesFragment extends BaseRecyclerViewFragment
     @Override
     protected void onRecyclerViewCreated()
     {
-        if (mMultiTypeAdapter != null)
+        if (mMultiTypeAdapter == null)
         {
+            Logger.info(TAG, "onRecyclerViewCreated: init multiAdapter.");
+            mMultiTypeAdapter = new MultiTypeAdapterEx();
+            mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder(this));
+            mMultiTypeAdapter.register(LoadMoreItem.class, new LoadMoreItemViewBinder());
             mMultiTypeAdapter.setOnLoadMoreListener(this);
             mRecyclerView.setAdapter(mMultiTypeAdapter);
+            return;
         }
-    }
 
-    private void initAdapter()
-    {
-        Logger.info(TAG, "onChanged: init multiAdapter.");
-        mMultiTypeAdapter = new MultiTypeAdapterEx();
-        mMultiTypeAdapter.register(Item.class, new ArticleItemViewBinder(this));
-        mMultiTypeAdapter.register(LoadMoreItem.class, new LoadMoreItemViewBinder());
+        Logger.info(TAG, "onRecyclerViewCreated: rebind multiAdapter.");
         mMultiTypeAdapter.setOnLoadMoreListener(this);
         mRecyclerView.setAdapter(mMultiTypeAdapter);
+    }
+
+    private void onInit()
+    {
         Logger.info(TAG, "onChanged: fetch data.");
         mVM.fetch(mOfficialAccount, ArticlesFragment.this);
     }
