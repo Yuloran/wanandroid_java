@@ -44,7 +44,7 @@ wanandroid_java is an android client for [wanandroid open API](http://wanandroid
 
 - [ViewHolder for dataBinding](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/databinding)
 - [Load more](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/loadmore)
-- [OnItemClickLienter for dataBinding](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/OnItemClickListener.java)
+- [OnItemClickListener for dataBinding](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/OnItemClickListener.java)
 - [MultiTypeAdapterEx](module_base/src/main/java/com/yuloran/module_base/ui/adapter/recyclerview/MultiTypeAdapterEx.java)
 
 **[GIF Compress Website](https://ezgif.com/maker)**
